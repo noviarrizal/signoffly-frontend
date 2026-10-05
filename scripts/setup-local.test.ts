@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
 import { importPKCS8, jwtVerify, SignJWT, importSPKI } from "jose";
-import { buildLocalEnv } from "./setup-local.mjs";
+import { apiUrlFromAddr, backendLinesFromEnv, buildLocalEnv } from "./setup-local.mjs";
 
 function parse(env: string): Record<string, string> {
   const out: Record<string, string> = {};
@@ -46,5 +46,30 @@ describe("buildLocalEnv", () => {
     const { env } = buildLocalEnv();
     expect(parse(env).ALLOW_DEV_LOGIN).toBe("true");
     expect(env.split("\n").filter((l) => l.startsWith("API_TOKEN_PRIVATE_KEY="))).toHaveLength(1);
+  });
+});
+
+describe("backendLinesFromEnv", () => {
+  it("gives back the same two lines the setup printed, from the saved file", () => {
+    const { env, backend } = buildLocalEnv();
+    expect(backendLinesFromEnv(env)).toEqual(backend);
+  });
+
+  it("returns null for a file that has no key, an empty key or a broken key", () => {
+    expect(backendLinesFromEnv("")).toBeNull();
+    expect(backendLinesFromEnv("API_TOKEN_PRIVATE_KEY=\nINTERNAL_SERVICE_SECRET=abc")).toBeNull();
+    expect(backendLinesFromEnv('API_TOKEN_PRIVATE_KEY="not a key"\nINTERNAL_SERVICE_SECRET=abc')).toBeNull();
+  });
+});
+
+describe("apiUrlFromAddr", () => {
+  it("follows the port the backend listens on", () => {
+    expect(apiUrlFromAddr(":18080")).toBe("http://localhost:18080");
+    expect(apiUrlFromAddr("127.0.0.1:9000")).toBe("http://localhost:9000");
+    expect(apiUrlFromAddr("0.0.0.0:8081")).toBe("http://localhost:8081");
+  });
+  it("falls back to the backend default when nothing is set", () => {
+    expect(apiUrlFromAddr(undefined)).toBe("http://localhost:8080");
+    expect(apiUrlFromAddr("")).toBe("http://localhost:8080");
   });
 });

@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
 import Credentials from "next-auth/providers/credentials";
-import { devLoginEnabled } from "@/lib/env";
+import { devLoginEnabled, githubConfigured } from "@/lib/env";
 import { ApiError } from "@/lib/api/errors";
 import { primaryVerifiedEmail } from "@/lib/github-email";
 import { syncUser } from "@/lib/users";
@@ -15,7 +15,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
   pages: { signIn: "/signin", error: "/signin" },
   providers: [
-    GitHub({ authorization: { params: { scope: "read:user user:email" } } }),
+    ...(githubConfigured() ? [GitHub({ authorization: { params: { scope: "read:user user:email" } } })] : []),
     ...(devLoginEnabled()
       ? [
           Credentials({

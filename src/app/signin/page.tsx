@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
 import { GithubLogo } from "@phosphor-icons/react/dist/ssr";
 import { auth, signIn } from "@/auth";
-import { devLoginEnabled, missingSetup } from "@/lib/env";
+import { devLoginEnabled, githubConfigured, missingSetup } from "@/lib/env";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { t, type MessageKey } from "@/lib/messages";
@@ -14,7 +14,7 @@ function destination(repo: string): string {
   return repo ? `/?repo=${encodeURIComponent(repo)}` : "/";
 }
 
-const KNOWN_ERRORS = ["no_verified_email", "email_in_use", "server", "Configuration", "OAuthCallbackError", "OAuthSignin", "AccessDenied"];
+const KNOWN_ERRORS = ["github_not_configured", "no_verified_email", "email_in_use", "server", "Configuration", "OAuthCallbackError", "OAuthSignin", "AccessDenied"];
 
 export default async function SignIn(props: PageProps<"/signin">) {
   const sp = await props.searchParams;
@@ -25,8 +25,11 @@ export default async function SignIn(props: PageProps<"/signin">) {
   const message = error ? t((KNOWN_ERRORS.includes(error) ? `signin.error.${error}` : "signin.error.default") as MessageKey) : "";
   const missing = missingSetup(); // names only, and only outside production
 
+  const githubReady = githubConfigured();
+
   async function github() {
     "use server";
+    if (!githubConfigured()) redirect(`/signin?error=github_not_configured${repo ? `&repo=${encodeURIComponent(repo)}` : ""}`);
     await signIn("github", { redirectTo: destination(repo) });
   }
   async function dev(form: FormData) {
@@ -65,9 +68,14 @@ export default async function SignIn(props: PageProps<"/signin">) {
         )}
 
         <form action={github} className="mt-8">
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" disabled={!githubReady} aria-describedby={githubReady ? undefined : "github-off"}>
             <GithubLogo aria-hidden size={18} /> {t("signin.github")}
           </Button>
+          {!githubReady && (
+            <p id="github-off" className="mt-2 text-[.85rem] text-ink-3">
+              {t("signin.githubOff")}
+            </p>
+          )}
         </form>
 
         {devLoginEnabled() && (

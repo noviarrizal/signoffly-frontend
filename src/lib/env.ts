@@ -11,6 +11,11 @@ export function goApiUrl(): string {
   return requireEnv("GO_API_URL").replace(/\/+$/, "");
 }
 
+/** GitHub sign-in only works when the OAuth app credentials are set. Without them GitHub would receive client_id=undefined. */
+export function githubConfigured(): boolean {
+  return Boolean(process.env.AUTH_GITHUB_ID?.trim() && process.env.AUTH_GITHUB_SECRET?.trim());
+}
+
 export function devLoginEnabled(): boolean {
   return process.env.NODE_ENV !== "production" && process.env.ALLOW_DEV_LOGIN === "true";
 }
@@ -22,7 +27,6 @@ export function missingSetup(): string[] {
   if (process.env.NODE_ENV === "production") return [];
   const need = ["AUTH_SECRET", "GO_API_URL", "INTERNAL_SERVICE_SECRET", "API_TOKEN_PRIVATE_KEY"];
   const missing = need.filter((k) => !process.env[k]?.trim());
-  const hasGitHub = Boolean(process.env.AUTH_GITHUB_ID?.trim() && process.env.AUTH_GITHUB_SECRET?.trim());
-  if (!hasGitHub && process.env.ALLOW_DEV_LOGIN !== "true") missing.push("AUTH_GITHUB_ID and AUTH_GITHUB_SECRET (or ALLOW_DEV_LOGIN=true)");
+  if (!githubConfigured() && process.env.ALLOW_DEV_LOGIN !== "true") missing.push("AUTH_GITHUB_ID and AUTH_GITHUB_SECRET (or ALLOW_DEV_LOGIN=true)");
   return missing;
 }

@@ -154,6 +154,8 @@
   "signin.error.no_verified_email": "Your GitHub account has no verified primary email. Verify one on GitHub and try again.",
   "signin.error.email_in_use": "That email already belongs to an account that signed in another way. Sign in the way you did first.",
   "signin.error.server": "We could not finish signing you in. Try again in a moment.",
+  "signin.error.github_not_configured": "GitHub sign-in is not set up on this server yet.",
+  "signin.githubOff": "GitHub sign-in is not set up yet. Add AUTH_GITHUB_ID and AUTH_GITHUB_SECRET, or use Dev sign in below.",
   "signin.error.Configuration": "Sign-in is not set up on this server yet.",
   "signin.error.OAuthCallbackError": "GitHub did not complete the sign-in. Try again.",
   "signin.error.OAuthSignin": "We could not start the sign-in with GitHub. Try again.",
