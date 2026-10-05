@@ -13,6 +13,8 @@ export interface Processor {
   where: string;
   /** Only providers that are really in use are listed in the policy. */
   active: boolean;
+  /** True for a language model provider. The policy then says what is sent to it. */
+  ai?: boolean;
 }
 
 /** Everything the documents state as fact. Change the facts here, not in the text. */

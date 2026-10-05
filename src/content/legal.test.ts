@@ -60,6 +60,15 @@ describe("the privacy policy states what the product really does", () => {
     expect(all).toMatch(/do not currently send your code or your data to an AI model provider/);
     expect(all).toMatch(/name the provider[\s\S]*before we start/);
   });
+  it("names the AI provider and what is sent once one is switched on", () => {
+    const on = text(privacySections({ ...facts, processors: facts.processors.map((p) => (p.ai ? { ...p, active: true } : p)) }));
+    expect(on).toContain("DeepSeek");
+    expect(on).toMatch(/title, the names of the files and the line numbers/);
+    expect(on).toMatch(/automatically remove secrets, email addresses and phone numbers/);
+    expect(on).toMatch(/never send your name, your email address or your account details/);
+    expect(on).not.toMatch(/do not currently send your code/);
+    expect(on).not.toMatch(/\b(compliant|guarantee)/i);
+  });
   it("lists only providers that are really in use", () => {
     expect(all).toContain("GitHub");
     expect(all).toContain("Neon");

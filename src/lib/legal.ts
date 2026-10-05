@@ -21,6 +21,10 @@ export const BASE_FACTS: Omit<LegalFacts, "operatorName" | "contactEmail"> = {
     { name: "Neon", purpose: "The database that stores accounts, scans and orders", where: "Singapore", active: true },
     // Not in use yet. Switch to true only when the provider really is used, and update the date above.
     { name: "Lemon Squeezy", purpose: "Card and PayPal payments", where: "United States", active: false },
+    // Switch to true in the same release that sets LLM_ENABLED=true in the backend. Before that, read the provider's
+    // own privacy policy and confirm where it processes data and whether API data is used for training, then fix
+    // `where` below and ask the lawyer to review the changed text.
+    { name: "DeepSeek", purpose: "Writing the plain-language explanation of each finding", where: "China", active: false, ai: true },
   ],
 };
 
