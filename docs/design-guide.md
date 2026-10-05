@@ -364,7 +364,7 @@ Motion and any scroll or pointer logic stay in small `"use client"` leaf compone
 
 These are deliberately unresolved. Do not treat the mock's values as final.
 
-1. **Pricing.** `$0` free and `$9` per scan are layout placeholders only.
+1. **Pricing.** Decided 2026-10-04: a project pass (one repository, 14 days, unlimited rescans), USD $19 and IDR Rp149.000, free tier of 3 scans a day with detail on the top 2 findings. The `$9` per scan in the mock is outdated.
 2. **Verdict thresholds.** What score or issue count maps to Signed off, Needs work and Blocked is undecided (the mock uses 63 and 2 high issues as a "needs work" example). Score ring color for signed off follows from this.
 3. **Mobile navigation.** The mock hides the links under 900px. A menu pattern is not designed yet.
 4. **Real badge asset and domain.** The mock uses `signoffly.example`. The real domain (`.io` and `.dev` looked free) is unconfirmed.

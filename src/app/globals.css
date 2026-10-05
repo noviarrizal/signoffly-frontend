@@ -1,0 +1,111 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  --bg: #ffffff;
+  --surface: #fafaf9;
+  --surface-2: #f0f0ee;
+  --ink: #121212;
+  --ink-2: #4a4a47;
+  --ink-3: #65655f;
+  --line: #e2e2de;
+  --accent: #2338d6;
+  --accent-ink: #ffffff;
+  --accent-tint: #e6eafd;
+  --low: #4a4a47;
+  --low-tint: #e6e6e3;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 12px 32px -12px rgb(0 0 0 / 0.12);
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0e0e0e;
+  --surface: #171717;
+  --surface-2: #222222;
+  --ink: #f2f2f0;
+  --ink-2: #b2b2ae;
+  --ink-3: #8f8f8b;
+  --line: #2c2c2c;
+  --accent: #93a0ff;
+  --accent-ink: #0e0e0e;
+  --accent-tint: #1a2040;
+  --low: #b2b2ae;
+  --low-tint: #262626;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 12px 32px -12px rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-tint: var(--accent-tint);
+  --color-low: var(--low);
+  --color-low-tint: var(--low-tint);
+  --radius-ctl: 10px;
+  --radius-chip: 8px;
+  --radius-card: 18px;
+  --breakpoint-split: 900px;
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --shadow-report: var(--shadow);
+}
+
+html {
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* One visible focus style for every interactive element. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--accent-tint);
+  color: var(--ink);
+}
+
+@keyframes shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+
+@keyframes stamp-land {
+  0% { transform: rotate(-7deg) scale(1.8); opacity: 0; }
+  70% { transform: rotate(-7deg) scale(0.95); opacity: 1; }
+  100% { transform: rotate(-7deg) scale(1); opacity: 1; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--line) 50%, var(--surface-2) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.3s linear infinite;
+  border-radius: 8px;
+}
+
+.stamp-land {
+  animation: stamp-land 600ms cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+  .stamp-land { animation: none; transform: rotate(-7deg); }
+  * { scroll-behavior: auto !important; }
+}
