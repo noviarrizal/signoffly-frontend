@@ -53,6 +53,10 @@ export function buildLocalEnv({ goApiUrl = "http://localhost:8080" } = {}) {
     "# AUTH_GITHUB_ID=",
     "# AUTH_GITHUB_SECRET=",
     "",
+    "# Shown in the Privacy Policy and the Terms (your own name or business name, and a contact email).",
+    "# LEGAL_OPERATOR_NAME=",
+    "# LEGAL_CONTACT_EMAIL=",
+    "",
   ].join("\n");
 
   return { env, backend: { API_TOKEN_PUBLIC_KEY: apiTokenPublicKey, INTERNAL_SERVICE_SECRET: internalSecret } };

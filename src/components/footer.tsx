@@ -9,6 +9,8 @@ const LINKS = [
   { href: "/#report", key: "nav.sample" },
   { href: "/pricing", key: "nav.pricing" },
   { href: "/#faq", key: "nav.faq" },
+  { href: "/privacy", key: "nav.privacy" },
+  { href: "/terms", key: "nav.terms" },
 ] as const;
 
 export function Footer() {

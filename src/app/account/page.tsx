@@ -79,6 +79,12 @@ export default async function Account() {
             </ul>
           )}
 
+          <p className="mt-4 text-[.95rem]">
+            <Link href="/history" className="underline underline-offset-4 hover:text-accent">
+              {t("history.all")}
+            </Link>
+          </p>
+
           <h2 className="mt-10 text-[1.5rem] font-medium leading-[1.15] tracking-[-.025em]">{t("account.orders")}</h2>
           {orders.length === 0 ? (
             <p className="mt-3 text-ink-2">{t("account.orders.none")}</p>

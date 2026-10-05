@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
 import { GithubLogo } from "@phosphor-icons/react/dist/ssr";
@@ -66,6 +67,18 @@ export default async function SignIn(props: PageProps<"/signin">) {
             </ul>
           </div>
         )}
+
+        <p className="mt-6 text-[.85rem] text-ink-3">
+          {t("signin.agree.before")}{" "}
+          <Link href="/terms" className="underline underline-offset-4 hover:text-accent">
+            {t("signin.agree.terms")}
+          </Link>{" "}
+          {t("signin.agree.middle")}{" "}
+          <Link href="/privacy" className="underline underline-offset-4 hover:text-accent">
+            {t("signin.agree.privacy")}
+          </Link>
+          .
+        </p>
 
         <form action={github} className="mt-8">
           <Button type="submit" className="w-full" disabled={!githubReady} aria-describedby={githubReady ? undefined : "github-off"}>

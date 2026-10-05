@@ -41,7 +41,8 @@ pnpm dev             # http://localhost:3000
 ## Layout
 
 ```
-src/app/            routes: / , /signin, /scan/[id], /pricing, /account, /api/*
+src/app/            routes: / , /signin, /scan/[id], /history, /pricing, /account, /privacy, /terms, /api/*
+src/content/        the Privacy Policy and the Terms as data (see docs/legal-review.md)
 src/components/     ui (button, tag), report (stamp, score ring, findings), scan (form, runner), marketing (landing sections), pricing, motion (reveal)
 src/lib/api/        token minting, Go client, BFF proxy, error and response types
 src/messages/       en.json
@@ -49,3 +50,7 @@ src/auth.ts         Auth.js configuration
 ```
 
 `AGENTS.md` says this version of Next.js has breaking changes and points to the docs in `node_modules/next/dist/docs/`. Read the relevant guide before writing framework code.
+
+## Privacy Policy and Terms
+
+`/privacy` and `/terms` are drafts that describe what the product really does. **They have not been reviewed by a lawyer.** Read `docs/legal-review.md` before launch: it lists the facts the text relies on, the decisions made, and the questions for the lawyer. Set `LEGAL_OPERATOR_NAME` and `LEGAL_CONTACT_EMAIL` in `.env.local` so the pages name who runs the service.
