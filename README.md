@@ -36,6 +36,8 @@ pnpm dev             # http://localhost:3000
 | `pnpm lint` | ESLint |
 | `pnpm exec tsc --noEmit` | Type check |
 | `pnpm exec vitest run` | Unit and component tests |
+| `pnpm e2e` | End-to-end browser tests (Playwright) against the real website and API, see `e2e/README.md` |
+| `pnpm e2e:network` | The same, plus real scans that call GitHub |
 | `pnpm exec next typegen` | Regenerate route types (`PageProps`, `RouteContext`) |
 
 ## Layout
