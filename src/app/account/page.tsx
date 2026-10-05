@@ -44,6 +44,17 @@ export default async function Account() {
           <h2 className="text-[1.5rem] font-medium leading-[1.15] tracking-[-.025em]">{t("account.quota")}</h2>
           <p className="mt-3 font-mono text-[1.1rem]">{t("account.quota.value", { used: me.quota.used, limit: me.quota.limit })}</p>
           {me.quota.resets_at && <p className="mt-1 text-[.9rem] text-ink-3">{t("account.quota.resets", { time: fmt(me.quota.resets_at) })}</p>}
+          <h2 className="mt-10 text-[1.5rem] font-medium leading-[1.15] tracking-[-.025em]">{t("account.data.title")}</h2>
+          <p className="mt-3 max-w-[40ch] text-[.95rem] text-ink-2">{t("account.data.body")}</p>
+          <p className="mt-3 flex flex-wrap gap-x-6 gap-y-2 text-[.95rem]">
+            <a href="/api/me/export" download className="underline underline-offset-4 hover:text-accent">
+              {t("account.data.export")}
+            </a>
+            <Link href="/account/delete" className="underline underline-offset-4 hover:text-accent">
+              {t("account.data.delete")}
+            </Link>
+          </p>
+
           <h2 className="mt-10 text-[1.5rem] font-medium leading-[1.15] tracking-[-.025em]">{t("account.passes")}</h2>
           {me.passes.length === 0 ? (
             <p className="mt-3 text-ink-2">{t("account.passes.none")}</p>

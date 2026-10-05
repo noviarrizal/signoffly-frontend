@@ -69,7 +69,10 @@ describe("the privacy policy states what the product really does", () => {
   });
   it("matches the retention decision: kept until the account is deleted", () => {
     expect(all).toMatch(/until you delete your account/);
-    expect(all).toMatch(/email us and we will delete your account/);
+    expect(all).toMatch(/you can do both yourself on your account page/);
+    expect(all).toMatch(/deleted with it/);
+    expect(all).toMatch(/kept outside the app/); // payment records outside the app are the only thing that outlives the account
+    expect(all).not.toMatch(/delete button.*is planned/);
   });
   it("does not promise a deadline it cannot be sure of", () => {
     expect(all).toMatch(/within the time the law requires/);

@@ -89,7 +89,7 @@ export function termsSections(f: LegalFacts): Section[] {
       id: "ending",
       title: "Ending your use",
       blocks: [
-        `You can stop using the service at any time and ask us to delete your account by emailing ${f.contactEmail}.`,
+        `You can stop using the service at any time and delete your account on your account page, or by emailing ${f.contactEmail}.`,
         "We may suspend or end your access if you break these terms, if the law requires it, or if your use puts the service or other people at risk. Where we reasonably can, we will tell you why.",
         "Sections that by their nature should continue, such as the ones about results, liability and the law that applies, continue after your use ends.",
       ],

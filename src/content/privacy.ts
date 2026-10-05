@@ -94,8 +94,8 @@ export function privacySections(f: LegalFacts): Section[] {
       blocks: [
         {
           list: [
-            "Your account, scans and reports: until you delete your account. When your account is deleted, so are your scans, findings, orders and passes.",
-            "Payment records: as long as accounting and tax rules require us to keep them.",
+            "Your account, scans, reports, orders and passes: until you delete your account. You can do that yourself on your account page, and everything tied to the account is deleted with it.",
+            "Records of payments that are kept outside the app, such as bank records and our own accounting: as long as accounting and tax rules require.",
             "Messages you send us: as long as we need them to deal with your request.",
             "Backups: copies disappear when the backups expire.",
           ],
@@ -109,7 +109,7 @@ export function privacySections(f: LegalFacts): Section[] {
         "Depending on where you live, you can ask us to:",
         { list: ["tell you what data we hold about you and give you a copy", "correct data that is wrong", "delete your data", "limit or stop how we use it", "send it to you in a form you can reuse", "stop relying on your consent, if that is what we rely on"] },
         `To use any of these rights, email ${f.contactEmail} from the address on your account. We may ask you to prove who you are. We answer as quickly as we can, and within the time the law requires.`,
-        "Deleting your account: a delete button in your account settings is planned. Until it exists, email us and we will delete your account and everything tied to it.",
+        "Downloading your data and deleting your account: you can do both yourself on your account page. You can also email us.",
         "You can also complain to the data protection authority in the place where you live.",
       ],
     },

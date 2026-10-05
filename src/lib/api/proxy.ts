@@ -54,6 +54,8 @@ export async function forwardToApi(req: Request, goPath: string): Promise<Respon
   const extra: Record<string, string> = {};
   const retry = res.headers.get("Retry-After");
   if (retry) extra["Retry-After"] = retry;
+  const disposition = res.headers.get("Content-Disposition");
+  if (disposition) extra["Content-Disposition"] = disposition; // the data export is a download
   return new Response(text, {
     status: res.status,
     headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", ...extra },

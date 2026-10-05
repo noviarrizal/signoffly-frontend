@@ -18,7 +18,8 @@ Where the text lives: `src/content/privacy.ts` and `src/content/terms.ts` (plain
 | No code or data is sent to an AI provider | `LLM_ENABLED=false`, milestone M6 not built | **M6 ships: name the provider, what is sent and where it is processed before enabling** (backend spec section 9.3 says DeepSeek processes data in China, unverified) |
 | Providers listed: GitHub, Neon (Singapore) | sign-in and database | add each provider the day it is used: hosting provider, Lemon Squeezy (`active: true` in `src/lib/legal.ts`) |
 | Retention: until the account is deleted | decided 2026-10-05 | an automatic deletion job is built (then state the period) |
-| Account deletion by email, button planned | the backend can delete a user (`DELETE /internal/users/{id}`), but there is **no button yet** | build the button, then update the text |
+| Users can download their data and delete their account on the account page | backend `GET /v1/me/export` and `DELETE /v1/me` (the delete needs a typed confirmation, and one `DELETE` removes the account, scans, findings, orders and passes through foreign keys) | the data model gains a table that is not removed with the user |
+| Payment records kept outside the app (bank records, the owner's accounting) outlive the account | the orders table is deleted with the account, so the owner must keep their own bookkeeping | order records must be kept inside the app (then change the delete to keep them, and say so) |
 | Free limit 3 scans per 24 hours, pass 14 days, refund 7 days | backend `FREE_SCANS_PER_DAY`, `PASS_DAYS`; refund decided 2026-10-05 | any of these change (they live in `BASE_FACTS`) |
 | Governing law: Republic of Indonesia | decided 2026-10-05 | the lawyer advises otherwise |
 
@@ -41,9 +42,10 @@ Items marked (unverified) come from secondary sources and must be checked.
 5. **Providers:** do GitHub and Neon terms act as data processing agreements, and do we need to sign anything else?
 6. **Terms:** is the liability cap (amount paid in the last 12 months, zero if nothing was paid) enforceable, including against consumers? Is a refund policy of 7 days acceptable under consumer protection law where buyers live?
 7. **Age:** is 18 right (UU PDP rules on children, GDPR digital consent age differs by country)?
-8. **Tax:** VAT or sales tax on digital services for Indonesian and foreign buyers, and what a receipt must show. (outside the scope of these documents, but the Terms say prices include or exclude taxes "as shown at checkout")
-9. **Disputes:** courts or arbitration, and which court.
-10. **Legal findings in the product:** the wording of `legalText` in the backend (`internal/findings/catalog.go`) and section 8 of the backend spec are also unreviewed.
+8. **Deleting order records:** when a user deletes their account, their orders are deleted too, while accounting and tax rules may require records of sales to be kept. Is it enough that the owner keeps bank records and a bookkeeping file outside the app, or must the app keep the order data (and the Privacy Policy say so)?
+9. **Tax:** VAT or sales tax on digital services for Indonesian and foreign buyers, and what a receipt must show. (outside the scope of these documents, but the Terms say prices include or exclude taxes "as shown at checkout")
+10. **Disputes:** courts or arbitration, and which court.
+11. **Legal findings in the product:** the wording of `legalText` in the backend (`internal/findings/catalog.go`) and section 8 of the backend spec are also unreviewed.
 
 ## Sources used for the structure
 - GDPR Articles 12 to 14 checklists: https://gdpr-text.com/read/article-13/ , https://www.dataprotection.ie/en/individuals/know-your-rights/right-be-informed-transparency-article-13-14-gdpr

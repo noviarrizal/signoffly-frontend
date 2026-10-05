@@ -89,6 +89,12 @@ describe("forwardToApi", () => {
     expect(await res.json()).toEqual(body);
   });
 
+  it("keeps the file name of a download, so the data export saves as a .json file", async () => {
+    fetchMock.mockResolvedValue(goResponse(200, { user: {} }, { "Content-Disposition": 'attachment; filename="signoffly-export-2026-10-05.json"' }));
+    const res = await forwardToApi(req("GET"), "/v1/me/export");
+    expect(res.headers.get("Content-Disposition")).toBe('attachment; filename="signoffly-export-2026-10-05.json"');
+  });
+
   it("answers 502 in the API's error shape when the API cannot be reached", async () => {
     fetchMock.mockRejectedValue(new TypeError("fetch failed: connect ECONNREFUSED 10.0.0.5:8080"));
     const res = await forwardToApi(req("GET"), "/v1/me");
