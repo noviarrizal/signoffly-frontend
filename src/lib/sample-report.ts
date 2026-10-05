@@ -2,7 +2,7 @@ import type { Finding, Report } from "@/lib/api/types";
 
 /**
  * A made-up report for the landing page. The repository does not exist and the numbers are examples.
- * It only shows findings Signoffly can really produce today (secrets, dependencies, Supabase, privacy),
+ * It only shows findings Signoffly can really produce today (secrets, dependencies, Supabase, privacy, tests, code quality),
  * so it never implies a check that has not been built. The page labels it "Sample data".
  */
 const f = (over: Partial<Finding> & Pick<Finding, "title" | "explanation" | "fix_prompt" | "severity" | "category" | "fingerprint">): Finding => ({
@@ -21,12 +21,12 @@ export const SAMPLE_REPORT: Report = {
   score: 63,
   summary: "Fix three things before you launch.",
   complete: true,
-  tally: { high: 3, medium: 2, low: 1 },
+  tally: { high: 3, medium: 3, low: 2 },
   regions: ["uu-pdp", "gdpr"],
   categories: [
     { id: "security", count: 3 },
-    { id: "testing", count: 0 },
-    { id: "quality", count: 0 },
+    { id: "testing", count: 1 },
+    { id: "quality", count: 1 },
     { id: "legal", count: 3 },
   ],
   findings: [
@@ -87,6 +87,28 @@ export const SAMPLE_REPORT: Report = {
       fix_prompt: "Add a consent banner so Google Analytics only loads after a visitor agrees, with accept and reject buttons of equal weight and a way to change the choice later. Mark anything that needs a lawyer to review.",
     }),
     f({
+      fingerprint: "t1",
+      rule_id: "testing.risky_untested",
+      category: "testing",
+      severity: "medium",
+      confidence: "medium",
+      title: "We found no test that mentions your payments code",
+      explanation:
+        "Your app handles payments, and none of its tests mention payments, checkout or webhooks. A silent bug here costs you customers or money. This is judged from file names and what the tests mention, not from measured coverage.",
+      evidence: [{ path: "app/api/checkout/route.ts" }],
+      fix_prompt:
+        "Write tests for the payment code: a successful payment, a declined card, a duplicate submit, a webhook that arrives twice, and a request from a signed-out visitor. Use the test runner already in this project and mock the payment provider.",
+    }),
+    f({
+      fingerprint: "q1",
+      rule_id: "quality.duplicate_code",
+      category: "quality",
+      severity: "low",
+      title: "The same code is copied in several places",
+      explanation: "About 86 lines across 3 files look copied from each other. A fix in one place does not reach the others, and the copies slowly drift apart.",
+      evidence: [{ path: "lib/orders.ts", line_start: 6, line_end: 18 }],
+      fix_prompt: "Move the shared logic in lib/orders.ts, lib/invoices.ts and app/cart/page.tsx into one function, make each place use it, and delete the copies. Do not change behavior.",
+    }),    f({
       fingerprint: "l3",
       category: "legal",
       severity: "low",

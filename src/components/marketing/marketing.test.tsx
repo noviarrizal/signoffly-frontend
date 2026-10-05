@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { render, screen, within } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { Checks } from "@/components/marketing/checks";
 import { SampleReport } from "@/components/marketing/sample-report";
 import { PricingPlans } from "@/components/marketing/pricing-plans";
@@ -10,18 +10,12 @@ import { SAMPLE_REPORT } from "@/lib/sample-report";
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: vi.fn() }) }));
 
 describe("Checks", () => {
-  it("shows four areas and says plainly that testing and code quality are not built yet", () => {
+  it("shows the four areas, each with its own card and no placeholder tags", () => {
     render(<Checks />);
     expect(screen.getAllByRole("article")).toHaveLength(4);
-    expect(screen.getAllByText("Coming soon")).toHaveLength(2);
-    const testing = screen.getByRole("heading", { name: "Testing" }).closest("article")!;
-    const quality = screen.getByRole("heading", { name: "Code quality" }).closest("article")!;
-    expect(within(testing).getByText("Coming soon")).toBeInTheDocument();
-    expect(within(quality).getByText("Coming soon")).toBeInTheDocument();
-    const security = screen.getByRole("heading", { name: "Security" }).closest("article")!;
-    expect(within(security).queryByText("Coming soon")).not.toBeInTheDocument();
+    for (const name of ["Legal and privacy", "Security", "Testing", "Code quality"]) expect(screen.getByRole("heading", { name })).toBeInTheDocument();
+    expect(screen.queryByText("Coming soon")).not.toBeInTheDocument();
   });
-
   it("keeps the legal disclaimer next to the regions", () => {
     render(<Checks />);
     expect(screen.getByText("Findings to review with a professional. Not legal advice.")).toBeInTheDocument();
@@ -38,7 +32,7 @@ describe("SampleReport", () => {
 
   it("only contains findings the product can really produce today", () => {
     const categories = new Set(SAMPLE_REPORT.findings.map((f) => f.category));
-    expect([...categories].sort()).toEqual(["legal", "security"]); // no testing or quality findings until those checks exist
+    expect([...categories].sort()).toEqual(["legal", "quality", "security", "testing"]);
     expect(SAMPLE_REPORT.findings.every((f) => f.fix_prompt && f.explanation)).toBe(true);
     expect(SAMPLE_REPORT.tally).toEqual({
       high: SAMPLE_REPORT.findings.filter((f) => f.severity === "high").length,

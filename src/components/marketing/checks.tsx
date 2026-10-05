@@ -6,15 +6,6 @@ import { t } from "@/lib/messages";
 
 const REGIONS = ["UU PDP", "GDPR", "CCPA", "PDPA"];
 
-/** Testing and code quality are not built yet, and the page says so rather than implying they are. */
-function Soon({ onDark = false }: { onDark?: boolean }) {
-  return (
-    <span className={`inline-block self-start rounded-chip border px-2 py-1 font-mono text-[.72rem] ${onDark ? "border-bg/40" : "border-ink/30"}`}>
-      {t("checks.soon")}
-    </span>
-  );
-}
-
 const cell = "flex min-h-[230px] flex-col gap-3 overflow-hidden rounded-card border p-7";
 
 export function Checks() {
@@ -69,9 +60,6 @@ export function Checks() {
               <Flask aria-hidden size={26} className="text-accent-tint" />
               <h3 className="text-2xl font-medium leading-[1.15] tracking-[-.025em]">{t("checks.testing.title")}</h3>
               <p className="max-w-[42ch] opacity-80">{t("checks.testing.body")}</p>
-              <div className="mt-auto">
-                <Soon onDark />
-              </div>
             </article>
           </Reveal>
 
@@ -80,9 +68,6 @@ export function Checks() {
               <Code aria-hidden size={26} className="text-accent" />
               <h3 className="text-2xl font-medium leading-[1.15] tracking-[-.025em]">{t("checks.quality.title")}</h3>
               <p className="max-w-[42ch] text-ink-2">{t("checks.quality.body")}</p>
-              <div className="mt-auto">
-                <Soon />
-              </div>
             </article>
           </Reveal>
         </div>
