@@ -31,6 +31,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={`${instrument.variable} ${geistMono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <noscript>
+          <style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style>
+        </noscript>
       </head>
       <body className="min-h-[100dvh] flex flex-col">
         <Nav />

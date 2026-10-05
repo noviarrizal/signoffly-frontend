@@ -9,8 +9,23 @@ const LABELS: Record<string, string> = {
   "pdpa-ph": "Data Privacy Act (Philippines)",
 };
 
+/** Short names for the chips in the report header. */
+const SHORT: Record<string, string> = {
+  "uu-pdp": "Indonesia",
+  gdpr: "EU",
+  ccpa: "California",
+  "pdpa-sg": "Singapore",
+  "pdpa-my": "Malaysia",
+  "pdpa-th": "Thailand",
+  "pdpa-ph": "Philippines",
+};
+
 export function regionLabel(id: string): string {
   return LABELS[id] ?? id;
+}
+
+export function regionShort(id: string): string {
+  return SHORT[id] ?? id;
 }
 
 export function regionList(ids: string[]): string {

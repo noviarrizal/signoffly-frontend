@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useId, useState, type FormEvent } from "react";
+import { useId, useState, type FormEvent, type ReactNode } from "react";
 import { GithubLogo } from "@phosphor-icons/react";
 import { Button, Spinner } from "@/components/ui/button";
 import { ApiError } from "@/lib/api/errors";
@@ -14,7 +14,7 @@ function formatReset(iso: string): string {
   return Number.isNaN(d.getTime()) ? "" : ` Your next free scan is at ${d.toLocaleString()}.`;
 }
 
-export function ScanForm({ signedIn, initialRepo = "" }: { signedIn: boolean; initialRepo?: string }) {
+export function ScanForm({ signedIn, initialRepo = "", children }: { signedIn: boolean; initialRepo?: string; children?: ReactNode }) {
   const router = useRouter();
   const id = useId();
   const [repo, setRepo] = useState(initialRepo);
@@ -55,13 +55,17 @@ export function ScanForm({ signedIn, initialRepo = "" }: { signedIn: boolean; in
 
   const errId = `${id}-error`;
   return (
-    <form onSubmit={onSubmit} noValidate className="w-full max-w-[40rem]">
-      <label htmlFor={id} className="mb-2 block text-[.9rem] font-medium">
+    <form onSubmit={onSubmit} noValidate className="w-full">
+      <label htmlFor={id} className="mb-2 block text-[.88rem] text-ink-2">
         {t("repo.label")}
       </label>
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <div className="relative flex-1">
-          <GithubLogo aria-hidden size={18} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ink-3" />
+      <div className="flex flex-wrap gap-[.6rem]">
+        <div
+          className={`flex min-w-0 flex-[1_1_260px] items-center gap-[.6rem] rounded-ctl bg-bg px-[.9rem] transition-[border-color,box-shadow] ${
+            error ? "border border-ink ring-2 ring-ink" : "border border-line focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-tint"
+          }`}
+        >
+          <GithubLogo aria-hidden size={18} className="shrink-0 text-ink-3" />
           <input
             id={id}
             type="text"
@@ -75,8 +79,8 @@ export function ScanForm({ signedIn, initialRepo = "" }: { signedIn: boolean; in
             }}
             placeholder={t("repo.placeholder")}
             aria-invalid={error ? true : undefined}
-            aria-describedby={error ? errId : undefined}
-            className={`w-full rounded-ctl bg-bg py-3 pl-10 pr-3 font-mono text-[.9rem] outline-none transition-shadow placeholder:text-ink-3 ${error ? "border border-ink ring-2 ring-ink" : "border border-line focus:border-accent focus:ring-[3px] focus:ring-accent-tint"}`}
+            aria-describedby={errId}
+            className="min-w-0 flex-1 border-0 bg-transparent py-[.85rem] font-mono text-[.9rem] text-ink outline-none placeholder:text-ink-3"
           />
         </div>
         <Button type="submit" disabled={busy}>
@@ -89,11 +93,10 @@ export function ScanForm({ signedIn, initialRepo = "" }: { signedIn: boolean; in
           )}
         </Button>
       </div>
-      {error && (
-        <p id={errId} role="alert" className="mt-2 text-[.9rem] font-semibold">
-          {error}
-        </p>
-      )}
+      <p id={errId} role="alert" className="mt-2 min-h-[1.4rem] text-[.86rem] font-semibold">
+        {error}
+      </p>
+      {children}
     </form>
   );
 }

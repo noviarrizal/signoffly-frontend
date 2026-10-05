@@ -14,6 +14,6 @@ describe("message catalog", () => {
   });
   it("fills placeholders", () => {
     expect(t("account.quota.value", { used: 2, limit: 3 })).toBe("2 of 3 used");
-    expect(t("pricing.pass.body", { days: 14 })).toContain("14 days");
+    expect(t("pricing.pass.per", { days: 14 })).toBe("per project, 14 days");
   });
 });

@@ -17,18 +17,16 @@ Browser  ->  Next.js (pages + /api/* routes)  ->  Go API
 
 ```powershell
 pnpm install
-Copy-Item .env.example .env.local    # then fill it in, see below
-pnpm dev                             # http://localhost:3000
+pnpm setup:local     # writes .env.local with fresh secrets and prints two lines for the backend
+pnpm dev             # http://localhost:3000
 ```
 
-`.env.local` needs the Go API address, the service secret, the signing key and Auth.js settings. Secrets in `.env.local` are never committed.
+`pnpm setup:local` makes the signing key, the shared service secret and `AUTH_SECRET`, and turns on a **Dev sign in** form so you can use the app without a GitHub OAuth app. It refuses to overwrite an existing `.env.local` (use `--force` for fresh secrets, then update the backend too). `.env.local` is never committed.
 
-1. Run the backend with `API_TOKEN_PUBLIC_KEY` and `INTERNAL_SERVICE_SECRET` set (see its README, "User API").
-2. Make a key pair in the backend repo: `go run ./cmd/devtoken keygen dev-key.private.pem`. Put the printed public key in the backend's environment. Put the private key in `API_TOKEN_PRIVATE_KEY` here, written on one line with `\n` between lines.
-3. `INTERNAL_SERVICE_SECRET` must be the same value in both apps.
-4. `AUTH_SECRET`: any long random string.
-5. Sign-in: create a GitHub OAuth app (callback `http://localhost:3000/api/auth/callback/github`) and set `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET`. Without one, set `ALLOW_DEV_LOGIN=true` to get a "Dev sign in" form. It is ignored in production builds.
-
+1. Add the two lines it prints (`API_TOKEN_PUBLIC_KEY`, `INTERNAL_SERVICE_SECRET`) to the backend `.env`, then run the backend (`go run ./cmd/server`, default port 8080, which is what `GO_API_URL` points to).
+2. Open the app, click Sign in, and use **Dev sign in** with any handle.
+3. If sign-in shows "Sign-in is not set up on this server yet", the page lists the settings that are missing. In the terminal, `[auth][error] MissingSecret` means `AUTH_SECRET` is not set, so `.env.local` is missing or the dev server was started before it existed. Restart `pnpm dev` after creating it.
+4. Real GitHub sign-in: create a GitHub OAuth app (callback `http://localhost:3000/api/auth/callback/github`) and set `AUTH_GITHUB_ID` and `AUTH_GITHUB_SECRET` in `.env.local`. `ALLOW_DEV_LOGIN` is ignored in production builds.
 ## Commands
 
 | Command | What it does |
@@ -44,7 +42,7 @@ pnpm dev                             # http://localhost:3000
 
 ```
 src/app/            routes: / , /signin, /scan/[id], /pricing, /account, /api/*
-src/components/     ui (button, tag), report (stamp, score ring, findings), scan (form, runner), pricing
+src/components/     ui (button, tag), report (stamp, score ring, findings), scan (form, runner), marketing (landing sections), pricing, motion (reveal)
 src/lib/api/        token minting, Go client, BFF proxy, error and response types
 src/messages/       en.json
 src/auth.ts         Auth.js configuration

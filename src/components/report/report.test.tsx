@@ -74,8 +74,8 @@ describe("FindingRow", () => {
 
   it("names the regions and the disclaimer on legal findings", () => {
     render(<ol><FindingRow finding={finding({ category: "legal", regions: ["uu-pdp", "gdpr"], disclaimer: "A finding to review, not legal advice.", evidence: [] })} repo="acme/shop" /></ol>);
-    expect(screen.getByText(/UU PDP \(Indonesia\) and GDPR \(EU\)/)).toBeInTheDocument();
-    expect(screen.getByText("A finding to review, not legal advice.")).toBeInTheDocument();
+    expect(screen.getByText(/Applies under: UU PDP \(Indonesia\) and GDPR \(EU\)\./)).toBeInTheDocument();
+    expect(screen.getByText(/A finding to review, not legal advice\./)).toBeInTheDocument();
   });
 });
 
@@ -87,7 +87,10 @@ describe("ReportView", () => {
     expect(screen.getByRole("heading", { name: "Fix 3 things before you launch." })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: /All\s*3/ })).toHaveAttribute("aria-selected", "true");
     expect(screen.getByRole("tab", { name: /Legal\s*1/ })).toBeInTheDocument();
-    expect(screen.getByText(/Legal checks for:/).closest("p")).toHaveTextContent("UU PDP (Indonesia) and GDPR (EU)");
+    const regions = screen.getByRole("group", { name: "Legal regions" });
+    expect(regions).toHaveTextContent("Legal checks for");
+    expect(within(regions).getByText("Indonesia")).toBeInTheDocument();
+    expect(within(regions).getByText("EU")).toBeInTheDocument();
   });
 
   it("filters by tab with a click and with the arrow keys", async () => {
