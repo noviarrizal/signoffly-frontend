@@ -7,8 +7,9 @@ import { SectionTitle } from "@/components/marketing/section-title";
 import { deleteAccount } from "@/app/account/delete/actions";
 import { DELETE_PHRASE } from "@/lib/delete-account";
 import { t, type MessageKey } from "@/lib/messages";
+import { PRIVATE } from "@/lib/site";
 
-export const metadata = { title: "Delete account" };
+export const metadata = { title: "Delete account", ...PRIVATE };
 
 export default async function DeleteAccount(props: PageProps<"/account/delete">) {
   if (!(await auth())?.user?.id) redirect("/signin");

@@ -3,6 +3,8 @@ import { Instrument_Sans, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Nav } from "@/components/nav";
 import { Footer } from "@/components/footer";
+import { t } from "@/lib/messages";
+import { siteUrl } from "@/lib/site";
 
 const instrument = Instrument_Sans({
   variable: "--font-instrument",
@@ -17,10 +19,18 @@ const geistMono = Geist_Mono({
   weight: ["400", "500", "600"],
 });
 
-export const metadata: Metadata = {
-  title: { default: "Signoffly", template: "%s | Signoffly" },
-  description: "Paste a GitHub repo and get one plain-language report on security, testing, quality and legal risk before you launch.",
-};
+// A function, not a constant, so SITE_URL is read when the server runs rather than when it is built.
+export async function generateMetadata(): Promise<Metadata> {
+  const description = t("meta.description");
+  return {
+    metadataBase: siteUrl(),
+    title: { default: t("meta.title"), template: "%s | Signoffly" },
+    description,
+    applicationName: t("brand"),
+    openGraph: { type: "website", siteName: t("brand"), title: t("meta.title"), description, locale: "en_US" },
+    twitter: { card: "summary_large_image", title: t("meta.title"), description },
+  };
+}
 
 // Runs before the first paint so the saved theme never flashes. Light is the default;
 // the OS theme is never followed. Storage can be unavailable, so everything is guarded.

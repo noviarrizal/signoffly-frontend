@@ -1,5 +1,11 @@
 {
   "brand": "Signoffly",
+  "meta.title": "Signoffly: know if your app is ready to ship",
+  "meta.description": "Paste a GitHub repo and get one plain-language report on security, testing, code quality and legal risk before you launch.",
+  "meta.pricing": "Scan a few times a day for free. Unlock every finding and fix prompt for one repository with a project pass. No subscription.",
+  "meta.privacy": "What Signoffly collects when you scan a repository, why, how long it is kept and how to delete it.",
+  "meta.terms": "The terms for using Signoffly, including what a scan report is and what it is not.",
+  "meta.og.alt": "Signoffly: know if your app is ready to ship. A signed off stamp.",
   "scan": "Scan a repo",
   "scanning": "Scanning",
   "nav.how": "How it works",

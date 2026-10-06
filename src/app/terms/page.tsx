@@ -3,7 +3,7 @@ import { termsSections } from "@/content/terms";
 import { resolveFacts, reviewedByLawyer } from "@/lib/legal";
 import { t } from "@/lib/messages";
 
-export const metadata = { title: "Terms of service" };
+export const metadata = { title: "Terms of service", description: t("meta.terms") };
 
 export default function Terms() {
   const { facts, missing } = resolveFacts();

@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/container";
 import { loadCatalog } from "@/lib/catalog";
 import { t } from "@/lib/messages";
 
-export const metadata = { title: "Pricing" };
+export const metadata = { title: "Pricing", description: t("meta.pricing") };
 
 export default async function Pricing(props: PageProps<"/pricing">) {
   const [session, catalog, sp] = await Promise.all([auth(), loadCatalog(), props.searchParams]);

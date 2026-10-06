@@ -6,8 +6,9 @@ import { SeverityTag } from "@/components/ui/tag";
 import { userFetch } from "@/lib/api/user";
 import type { Me, Order, ScanSummary } from "@/lib/api/types";
 import { t, type MessageKey } from "@/lib/messages";
+import { PRIVATE } from "@/lib/site";
 
-export const metadata = { title: "Account" };
+export const metadata = { title: "Account", ...PRIVATE };
 
 const fmt = (iso: string) => new Date(iso).toLocaleString();
 

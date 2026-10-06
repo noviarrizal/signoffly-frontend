@@ -7,8 +7,9 @@ import { userFetch } from "@/lib/api/user";
 import { olderCursor, PAGE_SIZE, parseBefore } from "@/lib/history";
 import type { ScanSummary } from "@/lib/api/types";
 import { t, type MessageKey } from "@/lib/messages";
+import { PRIVATE } from "@/lib/site";
 
-export const metadata = { title: "History" };
+export const metadata = { title: "History", ...PRIVATE };
 
 const when = (iso: string) => new Date(iso).toLocaleString();
 

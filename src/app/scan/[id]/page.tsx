@@ -3,8 +3,9 @@ import { auth } from "@/auth";
 import { ScanRunner } from "@/components/scan/scan-runner";
 import { Container } from "@/components/ui/container";
 import { isUuid } from "@/lib/validation";
+import { PRIVATE } from "@/lib/site";
 
-export const metadata = { title: "Your report" };
+export const metadata = { title: "Your report", ...PRIVATE };
 
 export default async function ScanPage(props: PageProps<"/scan/[id]">) {
   const { id } = await props.params;

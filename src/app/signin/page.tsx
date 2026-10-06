@@ -7,8 +7,9 @@ import { devLoginEnabled, githubConfigured, missingSetup } from "@/lib/env";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { t, type MessageKey } from "@/lib/messages";
+import { PRIVATE } from "@/lib/site";
 
-export const metadata = { title: "Sign in" };
+export const metadata = { title: "Sign in", ...PRIVATE };
 
 /** Only a path on this site, carrying at most the pasted repository, is ever used after sign-in. */
 function destination(repo: string): string {

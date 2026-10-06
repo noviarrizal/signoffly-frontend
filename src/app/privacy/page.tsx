@@ -3,7 +3,7 @@ import { privacySections } from "@/content/privacy";
 import { resolveFacts, reviewedByLawyer } from "@/lib/legal";
 import { t } from "@/lib/messages";
 
-export const metadata = { title: "Privacy policy" };
+export const metadata = { title: "Privacy policy", description: t("meta.privacy") };
 
 export default function Privacy() {
   const { facts, missing } = resolveFacts();
