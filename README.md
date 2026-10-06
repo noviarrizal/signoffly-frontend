@@ -11,6 +11,7 @@ Browser  ->  Next.js (pages + /api/* routes)  ->  Go API
 - **Sign-in:** Auth.js (GitHub, JWT session). On sign-in the server calls the Go API's `POST /internal/users/upsert` with the service secret and keeps the returned user id in the session. The email sent is the primary email GitHub has verified.
 - **API calls:** `/api/*` routes (`src/app/api`) are a thin backend-for-frontend. Each one forwards to a fixed Go path through `forwardToApi` (`src/lib/api/proxy.ts`), which reads the user id from the session, signs a 10 minute Ed25519 token (`src/lib/api/token.ts`) and calls Go. The browser never sees the token, the private key or the service secret, and cannot choose who it acts as.
 - **Gating:** the Go API removes locked content from free reports before it reaches this app. The UI only shows what it is given.
+- **Currency:** prices are listed with the visitor's currency first, from Cloudflare's `CF-IPCountry` header (`ID` shows IDR first, anything else or no header shows USD first), so the checkout selects it by default (`src/lib/currency.ts`). It is only a default: a VPN changes the country, so it never limits what can be bought. The payment method does that (IDR is only payable by Indonesian bank transfer or QRIS).
 - **Copy:** every UI string lives in `src/messages/en.json` (`t()` in `src/lib/messages.ts`) so translation is a data change. No em or en dashes in copy (a test enforces it).
 
 ## Setup
