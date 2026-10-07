@@ -7,13 +7,15 @@ import { userFetch } from "@/lib/api/user";
 import type { Me, Order, ScanSummary } from "@/lib/api/types";
 import { t, type MessageKey } from "@/lib/messages";
 import { PRIVATE } from "@/lib/site";
+import { isPaymentPage } from "@/lib/payment-page";
 
 export const metadata = { title: "Account", ...PRIVATE };
 
 const fmt = (iso: string) => new Date(iso).toLocaleString();
 
-export default async function Account() {
+export default async function Account(props: PageProps<"/account">) {
   const userId = (await auth())?.user?.id;
+  const justPaid = (await props.searchParams).paid === "1";
   if (!userId) redirect("/signin");
 
   let data: { me: Me; scans: ScanSummary[]; orders: Order[] } | null = null;
@@ -39,6 +41,11 @@ export default async function Account() {
   return (
     <Container className="py-[clamp(2.5rem,6vw,5rem)]">
       <h1 className="text-[clamp(2rem,4.2vw,3.4rem)] font-medium leading-[1.1] tracking-[-.035em]">{t("account.title")}</h1>
+      {justPaid && (
+        <p role="status" className="mt-6 max-w-[56ch] rounded-ctl border border-line bg-surface-2 px-4 py-3 text-[.95rem]">
+          {t("account.paid")}
+        </p>
+      )}
 
       <section className="mt-12 grid gap-10 split:grid-cols-12 split:gap-6">
         <div className="split:col-span-5">
@@ -108,7 +115,15 @@ export default async function Account() {
                     <span className="font-mono text-[.9rem]">{o.repo}</span>
                     <span className="text-[.85rem] text-ink-3">{t(`account.order.${o.status}` as MessageKey)}</span>
                   </div>
-                  {o.status === "pending" && (
+                  {o.status === "pending" && isPaymentPage(o.payment.checkout_url) && (
+                    <p className="mt-2 text-[.9rem]">
+                      <a href={o.payment.checkout_url} className="font-medium underline underline-offset-4 hover:text-accent">
+                        {t("account.order.pay")}
+                      </a>{" "}
+                      <span className="text-ink-2">· {o.payment.display}</span>
+                    </p>
+                  )}
+                  {o.status === "pending" && !o.payment.checkout_url && (
                     <p className="mt-2 text-[.9rem] text-ink-2">
                       {t("checkout.reference")}: <span className="font-mono">{o.payment.reference}</span> · {t("checkout.amount")}: <span className="font-mono">{o.payment.display}</span>
                     </p>

@@ -42,6 +42,6 @@ test("a link that is not a repository cannot be ordered", async ({ page, account
   await page.goto("/pricing");
   await page.getByLabel("Repository for the pass").fill("https://example.com");
   await page.getByRole("button", { name: "Get a project pass" }).click();
-  await expect(page.getByRole("alert").filter({ hasText: "Paste a GitHub link" })).toBeVisible();
+  await expect(page.getByRole("alert").filter({ hasText: "A pass covers repositories, not websites" })).toBeVisible();
   expect((await (await page.request.get("/api/orders")).json()).orders ?? []).toHaveLength(0);
 });

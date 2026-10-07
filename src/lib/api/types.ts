@@ -115,6 +115,8 @@ export interface Payment {
   amount_minor: number;
   display: string;
   instructions?: string;
+  /** Only for a card order: the page where it is paid. Follow it only if `isPaymentPage` says so. */
+  checkout_url?: string;
 }
 
 export interface Order {

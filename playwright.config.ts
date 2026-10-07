@@ -48,6 +48,14 @@ export default defineConfig({
         FREE_SCANS_PER_DAY: "3",
         GLOBAL_SCANS_PER_DAY: "1000",
         RATE_LIMIT_PER_MIN: "5000",
+        // The backend reads its own .env as well, and a test must never reach a real payment or AI service.
+        // An empty value here wins over the file.
+        LEMONSQUEEZY_API_KEY: "",
+        LEMONSQUEEZY_STORE_ID: "",
+        LEMONSQUEEZY_VARIANT_ID: "",
+        LEMONSQUEEZY_WEBHOOK_SECRET: "",
+        LLM_ENABLED: "false",
+        LLM_API_KEY: "",
         ...(E2E_DATABASE.url ? { DATABASE_URL: E2E_DATABASE.url } : {}),
         ...(E2E_DATABASE.direct ? { DATABASE_URL_DIRECT: E2E_DATABASE.direct } : {}),
       },
