@@ -137,3 +137,55 @@ describe("ReportView", () => {
     expect(screen.queryByText(/project pass unlocks/)).not.toBeInTheDocument();
   });
 });
+
+describe("ReportView for a website check", () => {
+  const site = () =>
+    report({
+      kind: "site",
+      repo: { owner: "", name: "yourapp.com", scanned_at: "2026-10-07T10:00:00Z" },
+      complete: false,
+      summary: "Here is what a visitor can see from the outside. Connect the repository to check the code itself before you launch.",
+      findings: [finding({ fingerprint: "w1", rule_id: "web.security_headers", severity: "medium", blocking: false, title: "Your site does not send some protective headers", evidence: [{ path: "/", snippet: "response header missing: Content-Security-Policy" }] })],
+      tally: { high: 0, medium: 1, low: 0 },
+      coverage: {
+        analyzers_run: ["web"],
+        analyzers_skipped: [],
+        analyzers_failed: [],
+        analyzers_incomplete: ["web"],
+        notes: { web: ["Only what a visitor's browser receives was checked.", "This address sends visitors to app.vercel.app. The checks below were run on that address."] },
+      },
+    });
+
+  it("shows the host, not owner and name", () => {
+    render(<ReportView report={site()} />);
+    expect(screen.getByRole("heading", { name: "yourapp.com" })).toBeInTheDocument();
+    expect(screen.queryByText("/yourapp.com")).not.toBeInTheDocument();
+  });
+
+  it("only offers the tabs a website can have", () => {
+    render(<ReportView report={site()} />);
+    expect(screen.getAllByRole("tab").map((t) => t.textContent?.replace(/\d+$/, "").trim())).toEqual(["All", "Security", "Legal"]);
+  });
+
+  it("says what a check from the outside is, lists what it could not see, and points to the repository", () => {
+    render(<ReportView report={site()} />);
+    expect(screen.getByText("This is a check from the outside")).toBeInTheDocument();
+    expect(screen.getByText(/cannot be signed off/)).toBeInTheDocument();
+    expect(screen.getByText("What this check could not see")).toBeInTheDocument();
+    expect(screen.getByText(/sends visitors to app\.vercel\.app/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Scan the repository" })).toHaveAttribute("href", "/");
+    expect(screen.queryByText("Some checks could not finish")).not.toBeInTheDocument();
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
+  it("labels the stamp as a view from the outside", () => {
+    render(<ReportView report={site()} />);
+    expect(screen.getByRole("img", { name: /needs work/i })).toHaveTextContent("from the outside");
+  });
+
+  it("leaves a repository report as it was", () => {
+    render(<ReportView report={report()} />);
+    expect(screen.getAllByRole("tab")).toHaveLength(5);
+    expect(screen.queryByText("This is a check from the outside")).not.toBeInTheDocument();
+  });
+});

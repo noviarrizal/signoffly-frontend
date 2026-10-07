@@ -130,3 +130,20 @@ describe("resolveFacts", () => {
     expect(reviewedByLawyer).toBe(false);
   });
 });
+
+describe("the documents cover website checks", () => {
+  const privacy = text(docs.privacy);
+  const terms = text(docs.terms);
+  it("the privacy policy says what happens when a website is checked", () => {
+    expect(privacy).toMatch(/looks at a public website the way a browser does/);
+    expect(privacy).toMatch(/host name of the website/);
+    expect(privacy).toMatch(/do not sign in, fill in forms or try to get into anything/);
+    expect(privacy).toMatch(/not the pages themselves/);
+  });
+  it("the terms describe it and its limit", () => {
+    expect(terms).toMatch(/looks at a public website/);
+    expect(terms).toMatch(/cannot see the code behind the site, so it cannot be signed off/);
+    expect(terms).toMatch(/check a website in order to harass/);
+    expect(terms).toMatch(/Website checks have a separate daily limit/);
+  });
+});

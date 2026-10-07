@@ -15,7 +15,7 @@ export function termsSections(f: LegalFacts): Section[] {
       id: "service",
       title: "What the service does",
       blocks: [
-        `${f.product} reads a public GitHub repository that you name, runs automated checks, and gives you a report with findings, a score and a verdict, plus a prompt you can use to fix each finding. It never runs your code. For now it supports public repositories only, and JavaScript and TypeScript projects for most checks.`,
+        `${f.product} reads a public GitHub repository that you name, or looks at a public website the way a browser does, runs automated checks, and gives you a report with findings, a score and a verdict, plus a prompt you can use to fix each finding. It never runs your code. For now it supports public repositories only, and JavaScript and TypeScript projects for most checks. A website check cannot see the code behind the site, so it cannot be signed off.`,
         "The service is new. Features, limits and prices can change, and some checks may be added or removed.",
       ],
     },
@@ -44,7 +44,7 @@ export function termsSections(f: LegalFacts): Section[] {
         "You agree not to:",
         {
           list: [
-            "scan a repository in order to harass, attack or harm its owner, or to find a weakness to exploit it",
+            "scan a repository or check a website in order to harass, attack or harm its owner, or to find a weakness to exploit it",
             "try to get around limits, quotas or the one-scan-at-a-time rule, for example with many accounts",
             "overload the service, scrape it, or use it in a way that harms other people's use of it",
             "probe, attack or reverse engineer the service, or try to reach data that is not yours",
@@ -58,7 +58,7 @@ export function termsSections(f: LegalFacts): Section[] {
       id: "plans",
       title: "Free use and project passes",
       blocks: [
-        `Free use: you can run up to ${f.freeScansPerDay} scans in any 24 hours, one at a time. Free reports show the title and location of every finding, and the full explanation and fix prompt for the most important ones.`,
+        `Free use: you can run up to ${f.freeScansPerDay} scans in any 24 hours, one at a time. Website checks have a separate daily limit. Free reports show the title and location of every finding, and the full explanation and fix prompt for the most important ones.`,
         `Project pass: a pass covers one repository for ${f.passDays} days. During that time you can scan that repository as often as you like (still one at a time), and every explanation and fix prompt is unlocked. A pass does not renew by itself.`,
         "The price and the currency are shown when you order. Prices include or exclude taxes as shown at checkout. If you pay by bank transfer or QRIS, we confirm your payment by hand, and your pass starts when we confirm it. We may add other payment methods.",
       ],

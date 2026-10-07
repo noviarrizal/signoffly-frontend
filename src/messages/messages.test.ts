@@ -10,7 +10,7 @@ describe("message catalog", () => {
     for (const [key, value] of Object.entries(en)) expect(value, key).not.toMatch(/\b(compliant|guaranteed|certified)\b/i);
   });
   it("uses the one label for the scan action", () => {
-    expect(t("scan")).toBe("Scan a repo");
+    expect(t("scan")).toBe("Run a check");
   });
   it("fills placeholders", () => {
     expect(t("account.quota.value", { used: 2, limit: 3 })).toBe("2 of 3 used");

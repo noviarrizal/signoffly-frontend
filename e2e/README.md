@@ -45,6 +45,7 @@ e2e/billing.spec.ts    ordering and approving a project pass
 e2e/mobile.spec.ts     phone size: no sideways scroll, the menu
 e2e/a11y.spec.ts       automated accessibility checks (axe), light and dark
 e2e/scan.spec.ts       real scan, locked and unlocked report (pnpm e2e:network)
+e2e/site.spec.ts       addresses that point inward are refused by the whole stack; a real website check (pnpm e2e:network)
 e2e/fixtures.ts        sign in helper, account fixture, owner actions
 e2e/support/           test servers' settings and secrets
 ```

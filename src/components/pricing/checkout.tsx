@@ -24,7 +24,7 @@ export function Checkout({ catalog, signedIn, initialRepo }: { catalog: Catalog;
     e.preventDefault();
     if (busy) return;
     if (!looksLikeRepoUrl(repo)) {
-      setError(t("repo.invalid"));
+      setError(t("checkout.invalid"));
       return;
     }
     setError(null);

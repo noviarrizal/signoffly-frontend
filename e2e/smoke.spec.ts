@@ -6,15 +6,15 @@ test.describe("the public pages", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText("ready to ship.");
     await expect(page).toHaveTitle(/Signoffly/);
 
-    await page.getByLabel("Public GitHub repository").first().fill("https://example.com");
-    await page.getByRole("button", { name: "Scan a repo" }).first().click();
+    await page.getByLabel("GitHub repository or website").first().fill("hello world");
+    await page.getByRole("button", { name: "Run a check" }).first().click();
     await expect(page.getByRole("alert").filter({ hasText: "Paste a GitHub link" })).toBeVisible();
   });
 
   test("a visitor who is not signed in is sent to sign in, and the pasted link is kept", async ({ page }) => {
     await page.goto("/");
-    await page.getByLabel("Public GitHub repository").first().fill("github.com/acme/shop");
-    await page.getByRole("button", { name: "Scan a repo" }).first().click();
+    await page.getByLabel("GitHub repository or website").first().fill("github.com/acme/shop");
+    await page.getByRole("button", { name: "Run a check" }).first().click();
     await expect(page).toHaveURL(/\/signin\?repo=github\.com%2Facme%2Fshop/);
   });
 

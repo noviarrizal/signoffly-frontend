@@ -12,8 +12,8 @@ test("a scan runs to a report, the free report is locked, and a pass unlocks it"
   expect(account.userId).toBeTruthy();
   await context.grantPermissions(["clipboard-read", "clipboard-write"]);
   await page.goto("/");
-  await page.getByLabel("Public GitHub repository").first().fill(REPO);
-  await page.getByRole("button", { name: "Scan a repo" }).first().click();
+  await page.getByLabel("GitHub repository or website").first().fill(REPO);
+  await page.getByRole("button", { name: "Run a check" }).first().click();
 
   // Progress, then the report with a verdict stamp.
   await expect(page).toHaveURL(/\/scan\/[0-9a-f-]{36}/);

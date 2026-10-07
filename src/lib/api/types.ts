@@ -46,6 +46,8 @@ export interface Tally {
 
 export interface Report {
   scan_id: string;
+  /** "site" for a website check, which has no owner and no code. */
+  kind?: "repo" | "site";
   repo: { owner: string; name: string; branch?: string; commit?: string; scanned_at: string };
   verdict: Verdict;
   score: number;
@@ -73,6 +75,7 @@ export interface ScanStage {
 
 export interface ScanView {
   id: string;
+  kind?: "repo" | "site";
   repo: string;
   status: ScanStatus;
   current_stage?: string;
@@ -89,6 +92,7 @@ export interface ScanView {
 
 export interface ScanSummary {
   id: string;
+  kind?: "repo" | "site";
   repo: string;
   status: ScanStatus;
   verdict?: Verdict;
@@ -100,6 +104,7 @@ export interface ScanSummary {
 export interface Me {
   user_id: string;
   quota: { limit: number; used: number; remaining: number; resets_at?: string };
+  site_quota?: { limit: number; used: number; remaining: number; resets_at?: string };
   passes: { repo: string; expires_at: string }[];
 }
 

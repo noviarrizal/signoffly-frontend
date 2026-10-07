@@ -2,16 +2,17 @@
 
 import { useRouter } from "next/navigation";
 import { useId, useState, type FormEvent, type ReactNode } from "react";
-import { GithubLogo } from "@phosphor-icons/react";
+import { GithubLogo, Globe } from "@phosphor-icons/react";
 import { Button, Spinner } from "@/components/ui/button";
 import { ApiError } from "@/lib/api/errors";
 import { bff } from "@/components/scan/api";
-import { looksLikeRepoUrl, newIdempotencyKey } from "@/lib/validation";
+import { looksLikeRepoUrl, looksLikeScanTarget, newIdempotencyKey } from "@/lib/validation";
 import { t } from "@/lib/messages";
 
-function formatReset(iso: string): string {
+function formatReset(iso: string, code: string): string {
   const d = new Date(iso);
-  return Number.isNaN(d.getTime()) ? "" : ` Your next free scan is at ${d.toLocaleString()}.`;
+  if (Number.isNaN(d.getTime())) return "";
+  return code === "site_daily_limit_reached" ? ` You can check again at ${d.toLocaleString()}.` : ` Your next free scan is at ${d.toLocaleString()}.`;
 }
 
 export function ScanForm({ signedIn, initialRepo = "", children }: { signedIn: boolean; initialRepo?: string; children?: ReactNode }) {
@@ -25,7 +26,7 @@ export function ScanForm({ signedIn, initialRepo = "", children }: { signedIn: b
     e.preventDefault();
     if (busy) return;
     const value = repo.trim();
-    if (!looksLikeRepoUrl(value)) {
+    if (!looksLikeScanTarget(value)) {
       setError(t("repo.invalid"));
       return;
     }
@@ -48,7 +49,7 @@ export function ScanForm({ signedIn, initialRepo = "", children }: { signedIn: b
         return;
       }
       const e2 = err instanceof ApiError ? err : null;
-      setError((e2?.message ?? t("error.generic")) + (e2?.code === "daily_limit_reached" && e2.resetsAt ? formatReset(e2.resetsAt) : ""));
+      setError((e2?.message ?? t("error.generic")) + (e2 && (e2.code === "daily_limit_reached" || e2.code === "site_daily_limit_reached") && e2.resetsAt ? formatReset(e2.resetsAt, e2.code) : ""));
       setBusy(false);
     }
   }
@@ -65,7 +66,11 @@ export function ScanForm({ signedIn, initialRepo = "", children }: { signedIn: b
             error ? "border border-ink ring-2 ring-ink" : "border border-line focus-within:border-accent focus-within:ring-[3px] focus-within:ring-accent-tint"
           }`}
         >
-          <GithubLogo aria-hidden size={18} className="shrink-0 text-ink-3" />
+          {repo.trim() && !looksLikeRepoUrl(repo) ? (
+            <Globe aria-hidden size={18} className="shrink-0 text-ink-3" />
+          ) : (
+            <GithubLogo aria-hidden size={18} className="shrink-0 text-ink-3" />
+          )}
           <input
             id={id}
             type="text"

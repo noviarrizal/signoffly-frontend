@@ -12,7 +12,7 @@ export function privacySections(f: LegalFacts): Section[] {
       id: "who",
       title: "Who we are",
       blocks: [
-        `${f.product} is a service that reads a public GitHub repository and writes a report on security, testing, code quality and privacy risk. It is run by ${f.operatorName} ("we", "us"). We decide why and how the personal data described here is used, which makes us the controller of that data.`,
+        `${f.product} is a service that reads a public GitHub repository, or looks at a public website the way a browser does, and writes a report on security, testing, code quality and privacy risk. It is run by ${f.operatorName} ("we", "us"). We decide why and how the personal data described here is used, which makes us the controller of that data.`,
         `You can reach us at ${f.contactEmail} for anything in this policy.`,
       ],
     },
@@ -25,7 +25,7 @@ export function privacySections(f: LegalFacts): Section[] {
             head: ["Kind of data", "What it includes", "Where it comes from"],
             rows: [
               ["Account", "Your email address, your name and the identifier of your GitHub account. We only accept an email that GitHub has verified.", "GitHub, when you sign in"],
-              ["Scan requests and results", "The repository you asked us to scan (owner, name, branch, commit), the legal regions you chose, the status, score and verdict, and the findings: rule, severity, file paths, line numbers and a short excerpt with secrets masked.", "You, and our analysis of the repository"],
+              ["Scan requests and results", "The repository you asked us to scan (owner, name, branch, commit) or the host name of the website you asked us to check (never the rest of the address), the legal regions you chose, the status, score and verdict, and the findings: rule, severity, file paths, line numbers and a short excerpt with secrets masked.", "You, and our analysis of the repository"],
               ["Orders and passes", "The repository, the currency and amount, a payment reference, the status and the dates.", "You, when you order a project pass"],
               ["Technical data", "Our server logs record the method, address path, result code and duration of each request. Our hosting providers may also log your IP address and browser details.", "Your browser"],
               ["Messages", "What you write to us by email, and your email address.", "You"],
@@ -43,6 +43,7 @@ export function privacySections(f: LegalFacts): Section[] {
         "To scan a public repository we download a temporary copy, read it as text, and delete the copy when the scan ends. We never run your code.",
         "We keep only the findings and the short excerpts needed to show you where a problem is. Before an excerpt is stored, we shorten it and mask anything that looks like a secret. Our logs do not contain your code or secrets.",
         "We only scan public repositories for now. Public code is already visible to anyone, and we still treat what we read from it with care.",
+        "To check a website, our server opens its home page and the script files that page loads from the same address, once over https and once over http, the way a browser does. We do not sign in, fill in forms or try to get into anything, and we refuse addresses that are not public websites. We keep the host name, the findings and short excerpts with secrets masked, and not the pages themselves.",
       ],
     },
     {

@@ -20,7 +20,9 @@ export function ReportView({ report, sample = false }: { report: Report; sample?
   const [tab, setTab] = useState<Tab>("all");
   const base = useId();
   const refs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const repo = `${report.repo.owner}/${report.repo.name}`;
+  const isSite = report.kind === "site"; // a website has a host and no code
+  const repo = isSite ? report.repo.name : `${report.repo.owner}/${report.repo.name}`;
+  const tabs: Tab[] = isSite ? ["all", "security", "legal"] : TABS;
 
   const counts = useMemo(() => {
     const c: Record<Tab, number> = { all: report.findings.length, security: 0, testing: 0, quality: 0, legal: 0 };
@@ -30,8 +32,8 @@ export function ReportView({ report, sample = false }: { report: Report; sample?
   const shown = tab === "all" ? report.findings : report.findings.filter((f) => f.category === tab);
 
   function onKey(e: KeyboardEvent<HTMLButtonElement>) {
-    const i = TABS.indexOf(tab);
-    const next = e.key === "ArrowRight" ? TABS[(i + 1) % TABS.length] : e.key === "ArrowLeft" ? TABS[(i + TABS.length - 1) % TABS.length] : null;
+    const i = tabs.indexOf(tab);
+    const next = e.key === "ArrowRight" ? tabs[(i + 1) % tabs.length] : e.key === "ArrowLeft" ? tabs[(i + tabs.length - 1) % tabs.length] : null;
     if (!next) return;
     e.preventDefault();
     setTab(next);
@@ -49,7 +51,7 @@ export function ReportView({ report, sample = false }: { report: Report; sample?
           <h2 className="break-all font-mono text-[1.1rem] font-medium leading-[1.2]">{repo}</h2>
           <p className="text-[.88rem] text-ink-3">{meta}</p>
         </div>
-        <Stamp verdict={report.verdict} subtitle={report.tally.high > 0 ? `${report.tally.high} high` : undefined} animate={!sample} />
+        <Stamp verdict={report.verdict} subtitle={isSite ? t("report.site.stamp") : report.tally.high > 0 ? `${report.tally.high} high` : undefined} animate={!sample} />
       </header>
 
       {report.regions.length > 0 && (
@@ -75,7 +77,27 @@ export function ReportView({ report, sample = false }: { report: Report; sample?
         </div>
       </section>
 
-      {!report.complete && (
+      {isSite && (
+        <section role="note" className="border-t border-line bg-bg px-6 py-5 split:px-7">
+          <p className="font-medium">{t("report.site.title")}</p>
+          <p className="mt-1 max-w-[62ch] text-[.95rem] text-ink-2">{t("report.site.body")}</p>
+          {(report.coverage.notes?.web?.length ?? 0) > 0 && (
+            <>
+              <p className="mt-4 text-[.88rem] font-medium text-ink-2">{t("report.site.notes")}</p>
+              <ul className="mt-2 max-w-[62ch] list-disc space-y-1 pl-5 text-[.9rem] text-ink-2">
+                {report.coverage.notes.web.map((n) => (
+                  <li key={n}>{n}</li>
+                ))}
+              </ul>
+            </>
+          )}
+          <Link href="/" className="mt-4 inline-block text-[.92rem] font-medium underline underline-offset-4 hover:text-accent">
+            {t("report.site.cta")}
+          </Link>
+        </section>
+      )}
+
+      {!report.complete && !isSite && (
         <section role="alert" className="border-t border-line bg-bg px-6 py-5 split:px-7">
           <p className="font-medium">{t("report.incomplete.title")}</p>
           <p className="mt-1 max-w-[62ch] text-[.95rem] text-ink-2">{t("report.incomplete.body")}</p>
@@ -102,7 +124,7 @@ export function ReportView({ report, sample = false }: { report: Report; sample?
       )}
 
       <div role="tablist" aria-label="Finding categories" className="flex gap-1 overflow-x-auto overflow-y-hidden border-y border-line px-6 split:px-7">
-        {TABS.map((id) => {
+        {tabs.map((id) => {
           const active = tab === id;
           return (
             <button

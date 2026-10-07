@@ -14,6 +14,7 @@ const POLL_MS = 2000;
 const GIVE_UP_MS = 10 * 60 * 1000;
 const SLOW_MS = 90 * 1000;
 const MICROCOPY: MessageKey[] = ["progress.1", "progress.2", "progress.3", "progress.4", "progress.5"];
+const MICROCOPY_SITE: MessageKey[] = ["progress.site.1", "progress.site.2", "progress.site.3", "progress.site.4", "progress.site.5"];
 
 type State =
   | { kind: "loading" }
@@ -27,6 +28,7 @@ export function ScanRunner({ id, pollMs = POLL_MS }: { id: string; pollMs?: numb
   const [state, setState] = useState<State>({ kind: "loading" });
   const [line, setLine] = useState(0);
   const [slow, setSlow] = useState(false);
+  const [site, setSite] = useState(false); // a website check shows its own wording while it runs
   const [attempt, setAttempt] = useState(0);
   const stopped = useRef(false);
 
@@ -54,6 +56,7 @@ export function ScanRunner({ id, pollMs = POLL_MS }: { id: string; pollMs?: numb
       try {
         const view = await bff<ScanView>(`/api/scans/${id}`);
         errors = 0;
+        if (!stopped.current) setSite(view.kind === "site");
         if (view.status === "failed") {
           setState({ kind: "failed", message: view.error_message || t("error.generic") });
           return;
@@ -120,9 +123,9 @@ export function ScanRunner({ id, pollMs = POLL_MS }: { id: string; pollMs?: numb
 
   return (
     <div className="rounded-card border border-line bg-surface p-6 split:p-8" aria-busy="true">
-      <h2 className="text-[1.4rem] font-medium tracking-[-.02em]">{t("progress.title")}</h2>
+      <h2 className="text-[1.4rem] font-medium tracking-[-.02em]">{t(site ? "progress.site.title" : "progress.title")}</h2>
       <p className="mt-3 font-mono text-[.85rem] text-accent" role="status">
-        {t(MICROCOPY[line])}
+        {t((site ? MICROCOPY_SITE : MICROCOPY)[line])}
       </p>
       <div className="mt-8 space-y-3" aria-hidden>
         <div className="skeleton h-6 w-1/3" />

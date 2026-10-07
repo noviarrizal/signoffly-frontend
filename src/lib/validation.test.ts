@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isUuid, looksLikeRepoUrl, newIdempotencyKey } from "@/lib/validation";
+import { isUuid, looksLikeRepoUrl, looksLikeScanTarget, looksLikeSite, newIdempotencyKey } from "@/lib/validation";
 
 describe("looksLikeRepoUrl", () => {
   it.each(["github.com/a/b", "https://github.com/name/repo", "  github.com/name/repo  ", "http://www.github.com/n/r.git", "GITHUB.COM/A/B"])("accepts %s", (v) => {
@@ -24,5 +24,20 @@ describe("newIdempotencyKey", () => {
     const keys = new Set(Array.from({ length: 50 }, newIdempotencyKey));
     expect(keys.size).toBe(50);
     for (const k of keys) expect(k).toMatch(/^[A-Za-z0-9_-]{8,64}$/);
+  });
+});
+
+describe("looksLikeSite and looksLikeScanTarget", () => {
+  it.each(["yourapp.com", "https://yourapp.com", "http://my-app.vercel.app/", "  https://Shop.Example.co.id/path?x=1  ", "sub.domain.example.com:443/x"])("accepts the website %s", (v) => {
+    expect(looksLikeSite(v)).toBe(true);
+    expect(looksLikeScanTarget(v)).toBe(true);
+  });
+  it.each(["", "hello world", "localhost", "127.0.0.1", "http://127.0.0.1:8080", "ftp://example.com", "yourapp", "exa mple.com", "javascript:alert(1)", "-bad.example.com", "example.c"])("does not accept %s as a website", (v) => {
+    expect(looksLikeSite(v)).toBe(false);
+  });
+  it("accepts a repository too, and nothing else", () => {
+    expect(looksLikeScanTarget("github.com/acme/shop")).toBe(true);
+    expect(looksLikeScanTarget("not a link")).toBe(false);
+    expect(looksLikeScanTarget("")).toBe(false);
   });
 });

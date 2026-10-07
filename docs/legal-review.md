@@ -15,6 +15,7 @@ Where the text lives: `src/content/privacy.ts` and `src/content/terms.ts` (plain
 | Orders store repository, currency, amount, reference, status, dates | `orders`, `entitlements` tables | a card provider is added (then list it, see below) |
 | Unsupported links are counted anonymously, the link is not stored | `input_signals` (counts by kind and platform) | the link is ever stored |
 | No analytics or advertising trackers; only a session cookie, a security cookie, a redirect cookie and a theme choice in the browser | Auth.js with JWT sessions; no analytics scripts | any analytics, pixel or chat widget is added |
+| A website check opens the home page and the script files it loads from the same address, over https and http, from our server; only the host name, the findings and masked excerpts are kept, not the pages | backend `internal/safeweb` and `internal/analyzers/web`; stored as owner `~site`, name = host | a check starts to sign in, submit forms, probe for files (.env, .git) or keep page contents |
 | No code or data is sent to an AI provider | `LLM_ENABLED=false`, milestone M6 not built | **M6 ships: name the provider, what is sent and where it is processed before enabling** (backend spec section 9.3 says DeepSeek processes data in China, unverified) |
 | Providers listed: GitHub, Neon (Singapore) | sign-in and database | add each provider the day it is used: hosting provider, Lemon Squeezy (`active: true` in `src/lib/legal.ts`) |
 | Retention: until the account is deleted | decided 2026-10-05 | an automatic deletion job is built (then state the period) |
@@ -45,7 +46,8 @@ Items marked (unverified) come from secondary sources and must be checked.
 8. **Deleting order records:** when a user deletes their account, their orders are deleted too, while accounting and tax rules may require records of sales to be kept. Is it enough that the owner keeps bank records and a bookkeeping file outside the app, or must the app keep the order data (and the Privacy Policy say so)?
 9. **Tax:** VAT or sales tax on digital services for Indonesian and foreign buyers, and what a receipt must show. (outside the scope of these documents, but the Terms say prices include or exclude taxes "as shown at checkout")
 10. **Disputes:** courts or arbitration, and which court.
-11. **Legal findings in the product:** the wording of `legalText` in the backend (`internal/findings/catalog.go`) and section 8 of the backend spec are also unreviewed.
+11. **Website checks:** is it acceptable for our server to request the public home page and script files of a website that the person may not own, when we only read what any visitor receives, identify ourselves in the User-Agent, and limit how often one site is checked? Should the Terms require the person to own the site or have permission? Is a check for exposed files such as .env or .git acceptable only after the person proves they control the domain (planned, not built)?
+12. **Legal findings in the product:** the wording of `legalText` in the backend (`internal/findings/catalog.go`) and section 8 of the backend spec are also unreviewed.
 
 ## Sources used for the structure
 - GDPR Articles 12 to 14 checklists: https://gdpr-text.com/read/article-13/ , https://www.dataprotection.ie/en/individuals/know-your-rights/right-be-informed-transparency-article-13-14-gdpr

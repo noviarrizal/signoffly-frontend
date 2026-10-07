@@ -20,7 +20,7 @@ test.describe("on a phone", () => {
 
     await open.click();
     const menu = page.getByRole("navigation", { name: "Menu" });
-    await expect(menu.getByRole("link", { name: "Scan a repo" })).toBeVisible();
+    await expect(menu.getByRole("link", { name: "Run a check" })).toBeVisible();
     for (const name of ["How it works", "Checks", "Sample report", "Pricing", "Sign in"]) await expect(menu.getByRole("link", { name })).toBeVisible();
 
     await page.keyboard.press("Escape");

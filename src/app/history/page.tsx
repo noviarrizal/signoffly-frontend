@@ -46,7 +46,10 @@ export default async function History(props: PageProps<"/history">) {
           {scans.map((s) => (
             <li key={s.id} className="border-t border-line first:border-t-0">
               <Link href={`/scan/${s.id}`} className="flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-4 transition-colors hover:text-accent">
-                <span className="break-all font-mono text-[.95rem]">{s.repo}</span>
+                <span className="flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1">
+                  <span className="break-all font-mono text-[.95rem]">{s.repo}</span>
+                  {s.kind === "site" && <span className="rounded-chip border border-line px-2 py-[.15rem] font-mono text-[.72rem] leading-none text-ink-2">{t("history.site")}</span>}
+                </span>
                 <span className="flex flex-wrap items-center gap-x-4 text-[.88rem] text-ink-3">
                   {s.verdict ? (
                     <span>
