@@ -2,6 +2,7 @@ import "server-only";
 import { goApiUrl } from "@/lib/env";
 import { ApiError, parseApiError } from "@/lib/api/errors";
 import { mintApiToken } from "@/lib/api/token";
+import { clientIpHeader } from "@/lib/api/client-ip";
 
 /** Server-side call that changes something as one signed-in user. Resolves when the API answers with a success status. */
 export async function userSend(userId: string, path: string, init: { method: string; body?: unknown }): Promise<void> {
@@ -12,6 +13,7 @@ export async function userSend(userId: string, path: string, init: { method: str
       headers: {
         Authorization: `Bearer ${await mintApiToken(userId)}`,
         ...(init.body !== undefined ? { "Content-Type": "application/json" } : {}),
+        ...(await clientIpHeader()),
       },
       body: init.body !== undefined ? JSON.stringify(init.body) : undefined,
       cache: "no-store",
@@ -28,7 +30,7 @@ export async function userFetch<T>(userId: string, path: string): Promise<T> {
   let res: Response;
   try {
     res = await fetch(`${goApiUrl()}${path}`, {
-      headers: { Authorization: `Bearer ${await mintApiToken(userId)}` },
+      headers: { Authorization: `Bearer ${await mintApiToken(userId)}`, ...(await clientIpHeader()) },
       cache: "no-store",
       signal: AbortSignal.timeout(15_000),
     });

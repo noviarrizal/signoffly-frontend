@@ -3,6 +3,7 @@ import { auth } from "@/auth";
 import { goApiUrl } from "@/lib/env";
 import { errorBody } from "@/lib/api/errors";
 import { mintApiToken } from "@/lib/api/token";
+import { clientIpFrom, FORWARD_HEADER } from "@/lib/api/client-ip";
 
 const TIMEOUT_MS = 20_000;
 const MAX_BODY = 8 * 1024;
@@ -29,6 +30,8 @@ export async function forwardToApi(req: Request, goPath: string): Promise<Respon
   const headers: Record<string, string> = { Authorization: `Bearer ${await mintApiToken(userId)}` };
   const key = req.headers.get("Idempotency-Key");
   if (key) headers["Idempotency-Key"] = key;
+  const ip = clientIpFrom(req.headers); // so the API limits each visitor, not this server
+  if (ip) headers[FORWARD_HEADER] = ip;
 
   let body: string | undefined;
   if (req.method !== "GET" && req.method !== "HEAD") {
