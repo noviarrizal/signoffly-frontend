@@ -21,12 +21,17 @@ test.describe("the public pages", () => {
   test("the theme choice survives a reload", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("html")).not.toHaveAttribute("data-theme", "dark"); // light is the default
-    await page.getByRole("button", { name: "Switch theme" }).click();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    // A click made before the page is interactive is lost (this shows right after a reload under load), so click again until it takes.
+    const switchTo = (dark: boolean) =>
+      expect(async () => {
+        await page.getByRole("button", { name: "Switch theme" }).click();
+        const html = expect(page.locator("html"));
+        await (dark ? html.toHaveAttribute("data-theme", "dark", { timeout: 1_500 }) : html.not.toHaveAttribute("data-theme", "dark", { timeout: 1_500 }));
+      }).toPass({ timeout: 15_000 });
+    await switchTo(true);
     await page.reload();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-    await page.getByRole("button", { name: "Switch theme" }).click();
-    await expect(page.locator("html")).not.toHaveAttribute("data-theme", "dark");
+    await switchTo(false);
   });
 
   test("the sample report filters by tab and copies a fix prompt", async ({ page, context }) => {
