@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ScanForm } from "@/components/scan/scan-form";
+import type { ReactNode } from "react";
 import { Stamp } from "@/components/report/stamp";
 import { Reveal } from "@/components/motion/reveal";
 import { Container } from "@/components/ui/container";
 import { t } from "@/lib/messages";
 
-export function Hero({ signedIn, initialRepo }: { signedIn: boolean; initialRepo: string }) {
+export function Hero({ signedIn, initialRepo, quota }: { signedIn: boolean; initialRepo: string; quota?: ReactNode }) {
   return (
     <section id="scan" className="relative overflow-hidden pt-[clamp(2.5rem,6vw,5rem)]">
       {/* A soft pool of the accent tint behind the headline. Decoration only. */}
@@ -27,6 +28,7 @@ export function Hero({ signedIn, initialRepo }: { signedIn: boolean; initialRepo
           </Reveal>
           <Reveal delay={180} className="col-span-12 split:col-start-7 split:col-end-[-1]">
             <ScanForm signedIn={signedIn} initialRepo={initialRepo}>
+              {quota}
               <p className="mt-1 text-[.92rem]">
                 <Link href="#report" className="border-b border-line transition-colors hover:border-accent hover:text-accent">
                   {t("hero.sample")}

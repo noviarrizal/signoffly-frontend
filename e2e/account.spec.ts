@@ -78,3 +78,12 @@ test("an old session whose account was deleted is told to sign in again", async 
   expect(res.status()).toBe(401);
   expect((await res.json()).error.code).toBe("unauthorized");
 });
+test("someone who has not scanned yet sees the ordinary page with their free scans counted, and a signed-in menu", async ({ page, account }) => {
+  expect(account.userId).toBeTruthy();
+  await page.goto("/");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("ready to ship.");
+  await expect(page.getByText("3 free scans left today")).toBeVisible();
+  const menu = page.getByRole("navigation", { name: "Main" });
+  for (const name of ["Repos", "History", "Pricing", "Account"]) await expect(menu.getByRole("link", { name })).toBeVisible();
+  await expect(menu.getByRole("link", { name: "How it works" })).toHaveCount(0); // not being sold to
+});

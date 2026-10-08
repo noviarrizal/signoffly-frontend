@@ -13,6 +13,14 @@ const LINKS = [
   { href: "/pricing", key: "nav.pricing" },
 ] as const;
 
+// A signed-in person is not being sold to: the page anchors of the landing page give way to their own places.
+const SIGNED_IN_LINKS = [
+  { href: "/", key: "nav.repos" },
+  { href: "/history", key: "nav.history" },
+  { href: "/pricing", key: "nav.pricing" },
+  { href: "/account", key: "nav.account" },
+] as const;
+
 const linkClass = "rounded-chip px-[.8rem] py-[.45rem] text-[.9rem] text-ink-2 transition-colors hover:bg-surface hover:text-ink";
 
 async function signOutAction() {
@@ -24,16 +32,8 @@ export async function Nav() {
   const session = await auth();
   const signedIn = Boolean(session?.user?.id);
 
-  const menuLinks: MenuLink[] = [
-    { href: "/#scan", label: t("scan") },
-    ...LINKS.map((l) => ({ href: l.href, label: t(l.key) })),
-    ...(signedIn
-      ? [
-          { href: "/history", label: t("nav.history") },
-          { href: "/account", label: t("nav.account") },
-        ]
-      : []),
-  ];
+  const links = signedIn ? SIGNED_IN_LINKS : LINKS;
+  const menuLinks: MenuLink[] = [{ href: "/#scan", label: t("scan") }, ...links.map((l) => ({ href: l.href, label: t(l.key) }))];
 
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-bg">
@@ -44,21 +44,11 @@ export async function Nav() {
         </Link>
         <div className="flex items-center gap-[.6rem]">
           <nav aria-label="Main" className="hidden gap-[.15rem] rounded-ctl bg-surface-2 p-1 split:flex">
-            {LINKS.map((l) => (
+            {links.map((l) => (
               <Link key={l.href} href={l.href} className={linkClass}>
                 {t(l.key)}
               </Link>
             ))}
-            {signedIn && (
-              <>
-                <Link href="/history" className={linkClass}>
-                  {t("nav.history")}
-                </Link>
-                <Link href="/account" className={linkClass}>
-                  {t("nav.account")}
-                </Link>
-              </>
-            )}
           </nav>
           <ThemeToggle />
           {signedIn ? (

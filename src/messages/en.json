@@ -230,5 +230,23 @@
   "signin.error.AccessDenied": "Sign-in was cancelled or not allowed.",
   "signin.error.default": "Sign in did not work. Try again.",
   "signin.setup.title": "Local setup is incomplete",
-  "signin.setup.body": "Run pnpm setup:local in the frontend folder, add the two lines it prints to the backend .env, then restart both. Still missing:"
+  "signin.setup.body": "Run pnpm setup:local in the frontend folder, add the two lines it prints to the backend .env, then restart both. Still missing:",
+  "nav.repos": "Repos",
+  "workspace.title": "Your repositories",
+  "workspace.delta.first": "First scan",
+  "workspace.delta.same": "Same as the first scan",
+  "workspace.delta.up": "+{n} since the first scan",
+  "workspace.delta.down": "-{n} since the first scan",
+  "workspace.scans": "{n} scans",
+  "workspace.scan1": "1 scan",
+  "workspace.lastScan": "Last scan",
+  "workspace.pass": "Project pass until",
+  "workspace.trend": "Score over the last scans",
+  "workspace.outOf": "out of 100",
+  "quota.left": "{n} free scans left today",
+  "quota.left1": "1 free scan left today",
+  "quota.none": "No free scans left until",
+  "quota.sites": "Website checks left today: {n} of {limit}",
+  "quota.sitesNone": "No website checks left until",
+  "quota.used": "{used} of {limit} free scans used today"
 }

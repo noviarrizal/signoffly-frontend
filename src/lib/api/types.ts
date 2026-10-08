@@ -132,3 +132,13 @@ export interface Catalog {
   pass_days: number;
   options: { currency: string; amount_minor: number; display: string; methods: string[] }[];
 }
+export interface RepoSummary {
+  repo: string;
+  kind: "repo" | "site";
+  latest: ScanSummary;
+  scans: number;
+  first_score?: number;
+  /** Oldest first, only scans that finished with a score. */
+  scores: number[];
+  pass_expires_at?: string;
+}
