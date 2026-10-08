@@ -117,7 +117,7 @@ test("the sign-in page does not offer GitHub until it is set up, and offers the 
 });
 
 test("protected pages and the API send a signed-out visitor to sign in", async ({ page, request }) => {
-  for (const path of ["/account", "/history", "/account/delete", "/scan/5f0a64c4-62d6-4b9b-8e0e-7b6f5c2f6d11"]) {
+  for (const path of ["/account", "/history", "/account/delete", "/repo/acme/shop", "/scan/5f0a64c4-62d6-4b9b-8e0e-7b6f5c2f6d11"]) {
     await page.goto(path);
     await expect(page).toHaveURL(/\/signin/);
   }

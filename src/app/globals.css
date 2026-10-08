@@ -104,8 +104,19 @@ body {
   animation: stamp-land 600ms cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
 }
 
+/* The score line draws itself once when the page opens. */
+.draw-line {
+  stroke-dasharray: 1;
+  animation: draw-line 900ms ease-out both;
+}
+@keyframes draw-line {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton { animation: none; }
   .stamp-land { animation: none; transform: rotate(-7deg); }
+  .draw-line { animation: none; }
   * { scroll-behavior: auto !important; }
 }

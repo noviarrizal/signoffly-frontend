@@ -133,6 +133,8 @@ export interface Catalog {
   options: { currency: string; amount_minor: number; display: string; methods: string[] }[];
 }
 export interface RepoSummary {
+  /** owner/name, the address of the repository page. A website is ~site/host. */
+  path: string;
   repo: string;
   kind: "repo" | "site";
   latest: ScanSummary;
@@ -141,4 +143,17 @@ export interface RepoSummary {
   /** Oldest first, only scans that finished with a score. */
   scores: number[];
   pass_expires_at?: string;
+}
+
+export interface RepoScan extends ScanSummary {
+  counts: { high: number; medium: number; low: number };
+}
+
+export interface RepoDetail {
+  path: string;
+  repo: string;
+  kind: "repo" | "site";
+  pass_expires_at?: string;
+  /** Newest first. */
+  scans: RepoScan[];
 }

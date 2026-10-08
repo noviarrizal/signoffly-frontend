@@ -7,6 +7,7 @@ const subscribe = () => () => {};
 const FORMATS = {
   date: { month: "short", day: "numeric" },
   time: { hour: "numeric", minute: "2-digit" },
+  datetime: { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" },
 } as const satisfies Record<string, Intl.DateTimeFormatOptions>;
 
 /** A time in the visitor's own time zone. The server cannot know it, so the server render is empty and the browser fills it in. */

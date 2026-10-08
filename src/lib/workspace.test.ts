@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hasPass, meterBoxes, scoreDelta, sparkDomain, sparkPoints, sparkY } from "@/lib/workspace";
+import { chartScans, hasPass, meterBoxes, rescanTarget, scoreDelta, sparkDomain, sparkPoints, sparkY } from "@/lib/workspace";
 
 describe("scoreDelta", () => {
   it("compares the latest score with the first", () => {
@@ -39,7 +39,7 @@ describe("sparkPoints", () => {
 
 describe("hasPass", () => {
   it("is false for a website even if the API sent a date", () => {
-    const base = { repo: "a/b", scans: 1, scores: [], latest: { id: "x", repo: "a/b", status: "done" as const, created_at: "" } };
+    const base = { path: "a/b", repo: "a/b", scans: 1, scores: [], latest: { id: "x", repo: "a/b", status: "done" as const, created_at: "" } };
     expect(hasPass({ ...base, kind: "repo", pass_expires_at: "2026-10-22T00:00:00Z" })).toBe(true);
     expect(hasPass({ ...base, kind: "site", pass_expires_at: "2026-10-22T00:00:00Z" })).toBe(false);
     expect(hasPass({ ...base, kind: "repo" })).toBe(false);
@@ -51,5 +51,27 @@ describe("meterBoxes", () => {
     expect(meterBoxes({ limit: 3, used: 2, remaining: 1 })).toEqual({ total: 3, used: 2 });
     expect(meterBoxes({ limit: 50, used: 60, remaining: 0 })).toEqual({ total: 10, used: 10 });
     expect(meterBoxes({ limit: 0, used: 1, remaining: 0 })).toEqual({ total: 0, used: 0 });
+  });
+});
+
+describe("chartScans", () => {
+  it("keeps finished scored scans, oldest first", () => {
+    const out = chartScans([
+      { status: "done", verdict: "needs_work", score: 81, created_at: "c" },
+      { status: "failed", created_at: "b" },
+      { status: "running", created_at: "b2" },
+      { status: "done", verdict: "blocked", score: 40, created_at: "a" },
+    ]);
+    expect(out.map((s) => [s.created_at, s.score])).toEqual([
+      ["a", 40],
+      ["c", 81],
+    ]);
+  });
+});
+
+describe("rescanTarget", () => {
+  it("rebuilds what the person would paste", () => {
+    expect(rescanTarget("acme/shop", "repo")).toBe("github.com/acme/shop");
+    expect(rescanTarget("~site/yourapp.com", "site")).toBe("https://yourapp.com");
   });
 });

@@ -48,3 +48,18 @@ export function meterBoxes(q: Me["quota"], cap = 10): { total: number; used: num
   const used = Math.min(Math.max(q.used, 0), total);
   return { total, used };
 }
+
+/** The scans a chart can show: finished, with a score, oldest first. The API sends the newest first. */
+export function chartScans(scans: { status: string; verdict?: string; score?: number; created_at: string }[]): { score: number; verdict: string; created_at: string }[] {
+  return scans
+    .filter((s) => s.status === "done" && s.verdict && typeof s.score === "number")
+    .map((s) => ({ score: s.score as number, verdict: s.verdict as string, created_at: s.created_at }))
+    .reverse();
+}
+
+/** What to send to start the same scan again: a GitHub link for a repository, an https address for a website. */
+export function rescanTarget(path: string, kind: "repo" | "site"): string {
+  const [owner, ...rest] = path.split("/");
+  const name = rest.join("/");
+  return kind === "site" ? `https://${name}` : `github.com/${owner}/${name}`;
+}

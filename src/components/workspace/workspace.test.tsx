@@ -5,6 +5,7 @@ import { RepoList } from "@/components/workspace/repo-list";
 import type { Me, RepoSummary } from "@/lib/api/types";
 
 const repo = (over: Partial<RepoSummary> & { repo: string }): RepoSummary => ({
+  path: over.repo,
   kind: "repo",
   scans: 1,
   scores: [],
@@ -13,7 +14,7 @@ const repo = (over: Partial<RepoSummary> & { repo: string }): RepoSummary => ({
 });
 
 describe("RepoList", () => {
-  it("opens the latest report, and says the score change in words", () => {
+  it("opens the repository page, and says the score change in words", () => {
     render(
       <RepoList
         repos={[
@@ -23,7 +24,7 @@ describe("RepoList", () => {
       />,
     );
     const shop = screen.getByRole("link", { name: /acme\/shop/ });
-    expect(shop).toHaveAttribute("href", "/scan/s1");
+    expect(shop).toHaveAttribute("href", "/repo/acme/shop");
     expect(within(shop).getByText("Needs work")).toBeInTheDocument();
     expect(within(shop).getByText("+41 since the first scan")).toBeInTheDocument();
     expect(within(shop).getByText("3 scans")).toBeInTheDocument();

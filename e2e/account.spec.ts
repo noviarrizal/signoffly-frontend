@@ -87,3 +87,10 @@ test("someone who has not scanned yet sees the ordinary page with their free sca
   for (const name of ["Repos", "History", "Pricing", "Account"]) await expect(menu.getByRole("link", { name })).toBeVisible();
   await expect(menu.getByRole("link", { name: "How it works" })).toHaveCount(0); // not being sold to
 });
+
+test("a repository you never scanned has no page", async ({ page, account }) => {
+  expect(account.userId).toBeTruthy();
+  const res = await page.goto("/repo/acme/never-scanned");
+  expect(res?.status()).toBe(404);
+  await expect(page.getByRole("heading", { name: "That page does not exist." })).toBeVisible();
+});

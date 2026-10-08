@@ -37,7 +37,6 @@
   "checks.title.emphasis": "one",
   "checks.title.after": "report.",
   "checks.lede": "Most scanners stop at security. Signoffly also looks at the parts that sink launches quietly: missing tests, messy code and privacy rules.",
-
   "checks.legal.title": "Legal and privacy",
   "checks.legal.body": "Region-aware checks for wherever you launch, including Indonesia and Southeast Asia.",
   "checks.legal.note": "Findings to review with a professional. Not legal advice.",
@@ -212,7 +211,8 @@
   "signin.agree.before": "By continuing you agree to the",
   "signin.agree.terms": "Terms",
   "signin.agree.middle": "and the",
-  "signin.agree.privacy": "Privacy Policy",  "signin.title": "Sign in to scan",
+  "signin.agree.privacy": "Privacy Policy",
+  "signin.title": "Sign in to scan",
   "signin.sub": "Sign in with GitHub or Google, so you do not need another password.",
   "signin.github": "Continue with GitHub",
   "signin.google": "Continue with Google",
@@ -230,7 +230,7 @@
   "signin.error.AccessDenied": "Sign-in was cancelled or not allowed.",
   "signin.error.default": "Sign in did not work. Try again.",
   "signin.setup.title": "Local setup is incomplete",
-  "signin.setup.body": "Run pnpm setup:local in the frontend folder, add the two lines it prints to the backend .env, then restart both. Still missing:",
+  "signin.setup.body": "Run pnpm setup:local in the frontend folder, add the two lines it prints to the backend .env, then restart both. Still missing:",
   "nav.repos": "Repos",
   "workspace.title": "Your repositories",
   "workspace.delta.first": "First scan",
@@ -248,5 +248,16 @@
   "quota.none": "No free scans left until",
   "quota.sites": "Website checks left today: {n} of {limit}",
   "quota.sitesNone": "No website checks left until",
-  "quota.used": "{used} of {limit} free scans used today"
+  "quota.used": "{used} of {limit} free scans used today",
+  "repo.back": "All repositories",
+  "repo.rescan": "Scan again",
+  "repo.recheck": "Check again",
+  "repo.passNote": "Scans of this repository are included until",
+  "repo.chart.title": "Score over time",
+  "repo.chart.gate": "The dashed line is {score}, the lowest score that can be signed off.",
+  "repo.chart.note": "A score can drop when we add new checks, not only when your code gets worse.",
+  "repo.chart.few": "Scan again after your fixes and the score will start to draw a line here.",
+  "repo.chart.label": "Score over time, from {from} to {to} across {n} scans",
+  "repo.scans": "Scans",
+  "repo.counts": "{high} high, {medium} medium, {low} low"
 }

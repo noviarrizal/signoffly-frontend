@@ -13,7 +13,7 @@ function deltaText(scores: number[]): string {
   return t(`workspace.delta.${d.kind}` as MessageKey);
 }
 
-/** One line per repository, separated by hairlines. Each line opens the latest report. */
+/** One line per repository, separated by hairlines. Each line opens the repository page. */
 export function RepoList({ repos }: { repos: RepoSummary[] }) {
   return (
     <ul className="mt-6 border-b border-line">
@@ -23,7 +23,7 @@ export function RepoList({ repos }: { repos: RepoSummary[] }) {
         return (
           <li key={r.repo} className="border-t border-line">
             <Link
-              href={`/scan/${latest.id}`}
+              href={`/repo/${r.path.split("/").map(encodeURIComponent).join("/")}`}
               className="grid grid-cols-[1fr_auto] items-center gap-x-6 gap-y-3 py-5 transition-colors hover:bg-surface split:grid-cols-[minmax(0,1.5fr)_8.5rem_10.5rem_9rem_11rem] split:px-3"
             >
               <span className="col-span-2 min-w-0 split:col-span-1">
