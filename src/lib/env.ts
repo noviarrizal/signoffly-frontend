@@ -16,6 +16,11 @@ export function githubConfigured(): boolean {
   return Boolean(process.env.AUTH_GITHUB_ID?.trim() && process.env.AUTH_GITHUB_SECRET?.trim());
 }
 
+/** Google sign-in works only when the OAuth client credentials are set, for the same reason as GitHub. */
+export function googleConfigured(): boolean {
+  return Boolean(process.env.AUTH_GOOGLE_ID?.trim() && process.env.AUTH_GOOGLE_SECRET?.trim());
+}
+
 export function devLoginEnabled(): boolean {
   return process.env.NODE_ENV !== "production" && process.env.ALLOW_DEV_LOGIN === "true";
 }
@@ -27,6 +32,8 @@ export function missingSetup(): string[] {
   if (process.env.NODE_ENV === "production") return [];
   const need = ["AUTH_SECRET", "GO_API_URL", "INTERNAL_SERVICE_SECRET", "API_TOKEN_PRIVATE_KEY"];
   const missing = need.filter((k) => !process.env[k]?.trim());
-  if (!githubConfigured() && process.env.ALLOW_DEV_LOGIN !== "true") missing.push("AUTH_GITHUB_ID and AUTH_GITHUB_SECRET (or ALLOW_DEV_LOGIN=true)");
+  if (!githubConfigured() && !googleConfigured() && process.env.ALLOW_DEV_LOGIN !== "true") {
+    missing.push("AUTH_GITHUB_ID and AUTH_GITHUB_SECRET, or AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET (or ALLOW_DEV_LOGIN=true)");
+  }
   return missing;
 }

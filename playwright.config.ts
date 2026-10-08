@@ -78,6 +78,8 @@ export default defineConfig({
         ALLOW_DEV_LOGIN: "true",
         AUTH_GITHUB_ID: "",
         AUTH_GITHUB_SECRET: "",
+        AUTH_GOOGLE_ID: "",
+        AUTH_GOOGLE_SECRET: "",
         LEGAL_OPERATOR_NAME: "E2E Operator",
         LEGAL_CONTACT_EMAIL: "legal@e2e.test",
       },

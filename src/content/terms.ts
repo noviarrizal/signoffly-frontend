@@ -33,7 +33,7 @@ export function termsSections(f: LegalFacts): Section[] {
       id: "account",
       title: "Your account",
       blocks: [
-        "You sign in with GitHub. Keep your access secure and do not share your account. You are responsible for what happens under it. Tell us if you think someone else is using it.",
+        "You sign in with GitHub or Google. Keep your access secure and do not share your account. You are responsible for what happens under it. Tell us if you think someone else is using it.",
         "Give us accurate information, including a working email address.",
       ],
     },

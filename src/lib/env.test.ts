@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { devLoginEnabled, githubConfigured, missingSetup } from "@/lib/env";
+import { devLoginEnabled, githubConfigured, googleConfigured, missingSetup } from "@/lib/env";
 
 afterEach(() => vi.unstubAllEnvs());
 
@@ -45,6 +45,31 @@ describe("missingSetup", () => {
     vi.stubEnv("NODE_ENV", "development");
     vi.stubEnv("AUTH_GITHUB_ID", "");
     vi.stubEnv("ALLOW_DEV_LOGIN", "true");
+    expect(missingSetup()).toEqual([]);
+  });
+});
+
+describe("googleConfigured", () => {
+  it("needs both the id and the secret, so Google never receives an empty client id", () => {
+    vi.stubEnv("AUTH_GOOGLE_ID", "");
+    vi.stubEnv("AUTH_GOOGLE_SECRET", "");
+    expect(googleConfigured()).toBe(false);
+    vi.stubEnv("AUTH_GOOGLE_ID", "abc.apps.googleusercontent.com");
+    expect(googleConfigured()).toBe(false);
+    vi.stubEnv("AUTH_GOOGLE_SECRET", "xyz");
+    expect(googleConfigured()).toBe(true);
+    vi.stubEnv("AUTH_GOOGLE_SECRET", "   ");
+    expect(googleConfigured()).toBe(false);
+  });
+
+  it("is a sign-in method on its own, so GitHub is not required for a working setup", () => {
+    for (const k of ["AUTH_SECRET", "GO_API_URL", "INTERNAL_SERVICE_SECRET", "API_TOKEN_PRIVATE_KEY"]) vi.stubEnv(k, "x");
+    vi.stubEnv("NODE_ENV", "development");
+    vi.stubEnv("AUTH_GITHUB_ID", "");
+    vi.stubEnv("ALLOW_DEV_LOGIN", "");
+    expect(missingSetup().join(" ")).toContain("AUTH_GOOGLE_ID");
+    vi.stubEnv("AUTH_GOOGLE_ID", "id");
+    vi.stubEnv("AUTH_GOOGLE_SECRET", "secret");
     expect(missingSetup()).toEqual([]);
   });
 });

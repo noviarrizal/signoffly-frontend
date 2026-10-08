@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { AuthError } from "next-auth";
-import { GithubLogo } from "@phosphor-icons/react/dist/ssr";
+import { GithubLogo, GoogleLogo } from "@phosphor-icons/react/dist/ssr";
 import { auth, signIn } from "@/auth";
-import { devLoginEnabled, githubConfigured, missingSetup } from "@/lib/env";
+import { devLoginEnabled, githubConfigured, googleConfigured, missingSetup } from "@/lib/env";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { t, type MessageKey } from "@/lib/messages";
@@ -16,7 +16,7 @@ function destination(repo: string): string {
   return repo ? `/?repo=${encodeURIComponent(repo)}` : "/";
 }
 
-const KNOWN_ERRORS = ["github_not_configured", "no_verified_email", "email_in_use", "server", "Configuration", "OAuthCallbackError", "OAuthSignin", "AccessDenied"];
+const KNOWN_ERRORS = ["github_not_configured", "google_not_configured", "no_verified_email", "email_in_use", "server", "Configuration", "OAuthCallbackError", "OAuthSignin", "AccessDenied"];
 
 export default async function SignIn(props: PageProps<"/signin">) {
   const sp = await props.searchParams;
@@ -28,11 +28,17 @@ export default async function SignIn(props: PageProps<"/signin">) {
   const missing = missingSetup(); // names only, and only outside production
 
   const githubReady = githubConfigured();
+  const googleReady = googleConfigured();
 
   async function github() {
     "use server";
     if (!githubConfigured()) redirect(`/signin?error=github_not_configured${repo ? `&repo=${encodeURIComponent(repo)}` : ""}`);
     await signIn("github", { redirectTo: destination(repo) });
+  }
+  async function google() {
+    "use server";
+    if (!googleConfigured()) redirect(`/signin?error=google_not_configured${repo ? `&repo=${encodeURIComponent(repo)}` : ""}`);
+    await signIn("google", { redirectTo: destination(repo) });
   }
   async function dev(form: FormData) {
     "use server";
@@ -91,6 +97,14 @@ export default async function SignIn(props: PageProps<"/signin">) {
             </p>
           )}
         </form>
+
+        {googleReady && (
+          <form action={google} className="mt-3">
+            <Button type="submit" variant="ghost" className="w-full">
+              <GoogleLogo aria-hidden size={18} /> {t("signin.google")}
+            </Button>
+          </form>
+        )}
 
         {devLoginEnabled() && (
           <form action={dev} className="mt-10 border-t border-line pt-6">

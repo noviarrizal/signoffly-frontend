@@ -18,6 +18,8 @@ export const BASE_FACTS: Omit<LegalFacts, "operatorName" | "contactEmail"> = {
   governingLaw: "the Republic of Indonesia",
   processors: [
     { name: "GitHub", purpose: "Sign-in, and reading the public repositories you ask us to scan", where: "United States and other countries", active: true },
+    // Not in use until Google sign-in is switched on (AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET). Set to true in that release.
+    { name: "Google", purpose: "Sign-in, if you choose Google", where: "United States and other countries", active: false },
     { name: "Neon", purpose: "The database that stores accounts, scans and orders", where: "Singapore", active: true },
     // Not in use yet. Switch to true only when the provider really is used, and update the date above.
     { name: "Lemon Squeezy", purpose: "Card and PayPal payments", where: "United States", active: false },

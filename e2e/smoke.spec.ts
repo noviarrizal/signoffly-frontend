@@ -18,6 +18,12 @@ test.describe("the public pages", () => {
     await expect(page).toHaveURL(/\/signin\?repo=github\.com%2Facme%2Fshop/);
   });
 
+  test("the sign-in page offers only the sign-in methods that are set up", async ({ page }) => {
+    await page.goto("/signin");
+    await expect(page.getByRole("button", { name: "Continue with GitHub" })).toBeDisabled(); // no GitHub app in the test setup
+    await expect(page.getByRole("button", { name: "Continue with Google" })).toHaveCount(0); // and no Google client: no dead button
+    await expect(page.getByRole("button", { name: "Dev sign in" })).toBeVisible();
+  });
   test("the theme choice survives a reload", async ({ page }) => {
     await page.goto("/");
     await expect(page.locator("html")).not.toHaveAttribute("data-theme", "dark"); // light is the default

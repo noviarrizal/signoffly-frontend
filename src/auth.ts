@@ -1,9 +1,10 @@
 import NextAuth from "next-auth";
 import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
-import { devLoginEnabled, githubConfigured } from "@/lib/env";
+import { devLoginEnabled, githubConfigured, googleConfigured } from "@/lib/env";
 import { ApiError } from "@/lib/api/errors";
-import { primaryVerifiedEmail } from "@/lib/github-email";
+import { isOAuthProvider, verifiedEmailFor, type ProfileClaims } from "@/lib/sign-in-email";
 import { syncUser } from "@/lib/users";
 
 /** Sign-in failures the sign-in page knows how to explain. */
@@ -16,6 +17,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   pages: { signIn: "/signin", error: "/signin" },
   providers: [
     ...(githubConfigured() ? [GitHub({ authorization: { params: { scope: "read:user user:email" } } })] : []),
+    // Only the basic profile and email are asked for. The account chooser is always shown, so a person with several Google
+    // accounts picks one on purpose instead of being signed in with whichever one the browser is using.
+    ...(googleConfigured() ? [Google({ authorization: { params: { scope: "openid email profile", prompt: "select_account" } } })] : []),
     ...(devLoginEnabled()
       ? [
           Credentials({
@@ -39,13 +43,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       : []),
   ],
   callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider !== "github") return true; // the dev provider synced the user in authorize()
-      const email = await primaryVerifiedEmail(account.access_token);
+    async signIn({ user, account, profile }) {
+      if (!account || !isOAuthProvider(account.provider)) return true; // the dev provider synced the user in authorize()
+      const email = await verifiedEmailFor(account.provider, account, profile as ProfileClaims | undefined);
       if (!email) return "/signin?error=no_verified_email";
       try {
         user.goUserId = await syncUser({
-          provider: "github",
+          provider: account.provider,
           providerAccountId: account.providerAccountId,
           email,
           emailVerified: true,

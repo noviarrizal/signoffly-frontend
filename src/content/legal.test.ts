@@ -49,7 +49,7 @@ describe("the privacy policy states what the product really does", () => {
   });
   it("describes the data that is stored, and the data that is not", () => {
     expect(all).toMatch(/email address/);
-    expect(all).toMatch(/GitHub account/);
+    expect(all).toMatch(/GitHub or Google account/);
     expect(all).toMatch(/delete the copy when the scan ends/);
     expect(all).toMatch(/never run your code/);
     expect(all).toMatch(/mask anything that looks like a secret/);

@@ -24,7 +24,7 @@ export function privacySections(f: LegalFacts): Section[] {
           table: {
             head: ["Kind of data", "What it includes", "Where it comes from"],
             rows: [
-              ["Account", "Your email address, your name and the identifier of your GitHub account. We only accept an email that GitHub has verified.", "GitHub, when you sign in"],
+              ["Account", "Your email address, your name and the identifier of your GitHub or Google account. We only accept an email that GitHub or Google has verified.", "GitHub or Google, when you sign in"],
               ["Scan requests and results", "The repository you asked us to scan (owner, name, branch, commit) or the host name of the website you asked us to check (never the rest of the address), the legal regions you chose, the status, score and verdict, and the findings: rule, severity, file paths, line numbers and a short excerpt with secrets masked.", "You, and our analysis of the repository"],
               ["Orders and passes", "The repository, the currency and amount, a payment reference, the status and the dates.", "You, when you order a project pass"],
               ["Technical data", "Our server logs record the method, address path, result code and duration of each request. Our hosting providers may also log your IP address and browser details.", "Your browser"],
