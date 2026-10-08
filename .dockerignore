@@ -1,4 +1,6 @@
 # Nothing here may reach the image: secrets, dependencies from this machine, build leftovers and test output.
+# The e2e folder is NOT excluded: playwright.config.ts imports it and the build type-checks every .ts file. It is not
+# copied into the final image.
 .git
 .gitignore
 node_modules
@@ -8,7 +10,6 @@ node_modules
 .env
 .env.*
 !.env.example
-e2e
 test-results
 playwright-report
 coverage
