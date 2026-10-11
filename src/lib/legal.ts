@@ -4,10 +4,16 @@ import type { LegalFacts } from "@/content/legal-types";
  * The facts the Privacy Policy and the Terms state. Each one is a decision that was made on 2026-10-05
  * (see docs/legal-review.md). Update the date when the text changes.
  *
- * `reviewedByLawyer` stays false until a qualified lawyer has read both documents. While it is false, each page
- * says so at the top. The text was drafted by an AI assistant from public guidance and is not legal advice.
+ * `reviewedByLawyer` stays false until a qualified lawyer has read both documents. It is a statement of fact and is
+ * never set to true for any other reason. The text was drafted by an AI assistant from public guidance and is not
+ * legal advice.
+ *
+ * `showDraftNotice` decides whether the pages carry a notice saying so at the top. The owner chose to launch first and
+ * to have the documents reviewed once the service earns money (2026-10-11), so the notice is off. Set it to true to
+ * show it again.
  */
 export const reviewedByLawyer = false;
+export const showDraftNotice = false;
 
 export const BASE_FACTS: Omit<LegalFacts, "operatorName" | "contactEmail"> = {
   product: "Signoffly",

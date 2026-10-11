@@ -1,6 +1,6 @@
 # Legal review pack: Privacy Policy and Terms of Service
 
-Status (2026-10-05): **drafts written by an AI assistant from public guidance. Not reviewed by a lawyer. Not legal advice.** Do not charge users or open signups until a qualified lawyer has read both documents and this page. When that has happened, set `reviewedByLawyer = true` in `src/lib/legal.ts` (it removes the "Draft" notice from both pages) and update `lastUpdated`.
+Status (2026-10-05): **drafts written by an AI assistant from public guidance. Not reviewed by a lawyer. Not legal advice.** On 2026-10-11 the owner chose to launch before a review (a lawyer will be hired once the service earns money) and switched the "Draft" notice off with `showDraftNotice = false` in `src/lib/legal.ts`. `reviewedByLawyer` stays `false`: it is only for a real review. Do not charge users or open signups until a qualified lawyer has read both documents and this page. When that has happened, set `reviewedByLawyer = true` in `src/lib/legal.ts` (it removes the "Draft" notice from both pages) and update `lastUpdated`.
 
 Where the text lives: `src/content/privacy.ts` and `src/content/terms.ts` (plain data, easy to edit). Facts the text states are in `src/lib/legal.ts`. Tests in `src/content/legal.test.ts` keep the text honest (no dashes, no compliance claims, numbers match the product).
 

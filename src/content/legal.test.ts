@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { privacySections } from "@/content/privacy";
 import { termsSections } from "@/content/terms";
 import type { Block, LegalFacts, Section } from "@/content/legal-types";
-import { BASE_FACTS, resolveFacts, reviewedByLawyer } from "@/lib/legal";
+import { BASE_FACTS, resolveFacts, reviewedByLawyer, showDraftNotice } from "@/lib/legal";
 
 const facts: LegalFacts = { ...BASE_FACTS, operatorName: "Test Operator", contactEmail: "legal@example.test" };
 
@@ -130,8 +130,9 @@ describe("resolveFacts", () => {
   it("does not invent a name or an address", () => {
     expect(JSON.stringify(BASE_FACTS)).not.toMatch(/@/);
   });
-  it("starts out as not reviewed by a lawyer", () => {
-    expect(reviewedByLawyer).toBe(false);
+  it("says truthfully that no lawyer has reviewed the documents, even though the notice is switched off", () => {
+    expect(reviewedByLawyer).toBe(false); // only a real review may change this
+    expect(showDraftNotice).toBe(false); // the owner's decision of 2026-10-11, see src/lib/legal.ts
   });
 });
 

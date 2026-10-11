@@ -95,7 +95,7 @@ test.describe("the legal pages", () => {
     test(`${path} names the operator, says it is a draft, and its contents link works`, async ({ page }) => {
       await page.goto(path);
       await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
-      await expect(page.getByText("Draft, not yet reviewed by a lawyer")).toBeVisible();
+      await expect(page.getByText("Draft, not yet reviewed by a lawyer")).toHaveCount(0); // the notice is switched off (src/lib/legal.ts)
       await expect(page.getByText("E2E Operator").first()).toBeVisible();
       await expect(page.getByText("legal@e2e.test").first()).toBeVisible();
 
