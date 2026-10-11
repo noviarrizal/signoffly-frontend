@@ -11,7 +11,7 @@ export const reviewedByLawyer = false;
 
 export const BASE_FACTS: Omit<LegalFacts, "operatorName" | "contactEmail"> = {
   product: "Signoffly",
-  lastUpdated: "5 October 2026",
+  lastUpdated: "11 October 2026",
   passDays: 14,
   refundDays: 7,
   freeScansPerDay: 3,
@@ -21,8 +21,9 @@ export const BASE_FACTS: Omit<LegalFacts, "operatorName" | "contactEmail"> = {
     // Not in use until Google sign-in is switched on (AUTH_GOOGLE_ID and AUTH_GOOGLE_SECRET). Set to true in that release.
     { name: "Google", purpose: "Sign-in, if you choose Google", where: "United States and other countries", active: false },
     { name: "Neon", purpose: "The database that stores accounts, scans and orders", where: "Singapore", active: true },
-    // Not in use yet. Switch to true only when the provider really is used, and update the date above.
-    { name: "Lemon Squeezy", purpose: "Card and PayPal payments", where: "United States", active: false },
+    { name: "Biznet Gio", purpose: "Hosts our servers", where: "Indonesia", active: true },
+    // Switch to true in the same release that turns card payments on (LEMONSQUEEZY_* in the backend), and update the date above.
+    { name: "Lemon Squeezy", purpose: "Card and PayPal payments, as the seller of record", where: "United States", active: true },
     // Switch to true in the same release that sets LLM_ENABLED=true in the backend. Before that, read the provider's
     // own privacy policy and confirm where it processes data and whether API data is used for training, then fix
     // `where` below and ask the lawyer to review the changed text.

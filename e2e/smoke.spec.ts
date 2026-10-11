@@ -18,6 +18,14 @@ test.describe("the public pages", () => {
     await expect(page).toHaveURL(/\/signin\?repo=github\.com%2Facme%2Fshop/);
   });
 
+  test("a pasted website link reaches the sign-in address without its path, query or fragment", async ({ page }) => {
+    await page.goto("/");
+    await page.getByLabel("GitHub repository or website").first().fill("https://shop.example.com/reset/ABC?token=SECRET123#x");
+    await page.getByRole("button", { name: "Run a check" }).first().click();
+    await expect(page).toHaveURL((url) => url.pathname === "/signin" && url.searchParams.get("repo") === "https://shop.example.com");
+    for (const secret of ["SECRET123", "token", "reset"]) expect(page.url()).not.toContain(secret);
+  });
+
   test("the sign-in page offers only the sign-in methods that are set up", async ({ page }) => {
     await page.goto("/signin");
     await expect(page.getByRole("button", { name: "Continue with GitHub" })).toBeDisabled(); // no GitHub app in the test setup

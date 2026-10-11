@@ -6,7 +6,7 @@ import { GithubLogo, Globe } from "@phosphor-icons/react";
 import { Button, Spinner } from "@/components/ui/button";
 import { ApiError } from "@/lib/api/errors";
 import { bff } from "@/components/scan/api";
-import { looksLikeRepoUrl, looksLikeScanTarget, newIdempotencyKey } from "@/lib/validation";
+import { linkForUrl, looksLikeRepoUrl, looksLikeScanTarget, newIdempotencyKey } from "@/lib/validation";
 import { t } from "@/lib/messages";
 
 function formatReset(iso: string, code: string): string {
@@ -32,7 +32,7 @@ export function ScanForm({ signedIn, initialRepo = "", children }: { signedIn: b
     }
     setError(null);
     if (!signedIn) {
-      router.push(`/signin?repo=${encodeURIComponent(value)}`);
+      router.push(`/signin?repo=${encodeURIComponent(linkForUrl(value))}`);
       return;
     }
     setBusy(true);
@@ -45,7 +45,7 @@ export function ScanForm({ signedIn, initialRepo = "", children }: { signedIn: b
       router.push(`/scan/${res.id}`);
     } catch (err) {
       if (err instanceof ApiError && err.status === 401) {
-        router.push(`/signin?repo=${encodeURIComponent(value)}`);
+        router.push(`/signin?repo=${encodeURIComponent(linkForUrl(value))}`);
         return;
       }
       const e2 = err instanceof ApiError ? err : null;

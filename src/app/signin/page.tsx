@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { t, type MessageKey } from "@/lib/messages";
 import { PRIVATE } from "@/lib/site";
+import { linkForUrl } from "@/lib/validation";
 
 export const metadata = { title: "Sign in", ...PRIVATE };
 
@@ -20,7 +21,7 @@ const KNOWN_ERRORS = ["github_not_configured", "google_not_configured", "no_veri
 
 export default async function SignIn(props: PageProps<"/signin">) {
   const sp = await props.searchParams;
-  const repo = typeof sp.repo === "string" ? sp.repo.slice(0, 300) : "";
+  const repo = typeof sp.repo === "string" ? linkForUrl(sp.repo.slice(0, 300)) : "";
   const error = typeof sp.error === "string" ? sp.error.slice(0, 60) : "";
   if ((await auth())?.user?.id) redirect(destination(repo));
 

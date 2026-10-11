@@ -2,6 +2,8 @@ import type { LegalFacts, Section } from "@/content/legal-types";
 
 /** The Terms of Service. The numbers come from the product (free limits, pass length) and the decisions in docs/legal-review.md. */
 export function termsSections(f: LegalFacts): Section[] {
+  const on = (name: string) => f.processors.some((p) => p.name === name && p.active);
+  const idp = on("Google") ? "GitHub or Google" : "GitHub";
   return [
     {
       id: "agreement",
@@ -33,7 +35,7 @@ export function termsSections(f: LegalFacts): Section[] {
       id: "account",
       title: "Your account",
       blocks: [
-        "You sign in with GitHub or Google. Keep your access secure and do not share your account. You are responsible for what happens under it. Tell us if you think someone else is using it.",
+        `You sign in with ${idp}. Keep your access secure and do not share your account. You are responsible for what happens under it. Tell us if you think someone else is using it.`,
         "Give us accurate information, including a working email address.",
       ],
     },
@@ -48,6 +50,7 @@ export function termsSections(f: LegalFacts): Section[] {
             "try to get around limits, quotas or the one-scan-at-a-time rule, for example with many accounts",
             "overload the service, scrape it, or use it in a way that harms other people's use of it",
             "probe, attack or reverse engineer the service, or try to reach data that is not yours",
+            "ask us to look at a website unless you have the right to ask for that. We only read what any visitor to it can receive, and you are responsible for the request",
             "break the law or the rights of others while using the service",
           ],
         },
@@ -58,16 +61,18 @@ export function termsSections(f: LegalFacts): Section[] {
       id: "plans",
       title: "Free use and project passes",
       blocks: [
-        `Free use: you can run up to ${f.freeScansPerDay} scans in any 24 hours, one at a time. Website checks have a separate daily limit. Free reports show the title and location of every finding, and the full explanation and fix prompt for the most important ones.`,
+        `Free use: you can run up to ${f.freeScansPerDay} scans in any 24 hours, one at a time. Website checks have a separate daily limit. Free reports show the title and location of every finding. For each repository, up to two findings are shown in full, with their explanation and fix prompt, and those two stay open on later scans. The other findings stay locked until you buy a pass.`,
         `Project pass: a pass covers one repository for ${f.passDays} days. During that time you can scan that repository as often as you like (still one at a time), and every explanation and fix prompt is unlocked. A pass does not renew by itself.`,
-        "The price and the currency are shown when you order. Prices include or exclude taxes as shown at checkout. If you pay by bank transfer or QRIS, we confirm your payment by hand, and your pass starts when we confirm it. We may add other payment methods.",
+        on("Lemon Squeezy")
+          ? "Card and PayPal payments are made through Lemon Squeezy, which sells the pass to you as the seller of record. It collects the payment and any sales tax or VAT and sends your receipt, and its own terms apply to the payment. The price and the currency are shown at checkout, with tax included or excluded as the checkout says. Your pass starts when the payment is confirmed."
+          : "The price and the currency are shown when you order. Prices include or exclude taxes as shown at checkout. If you pay by bank transfer or QRIS, we confirm your payment by hand, and your pass starts when we confirm it. We may add other payment methods.",
       ],
     },
     {
       id: "refunds",
       title: "Refunds",
       blocks: [
-        `You can ask for a refund within ${f.refundDays} days of paying, as long as no scan has used the pass yet. Email ${f.contactEmail} with your payment reference. Once a scan has used the pass, or after ${f.refundDays} days, payments are not refundable, unless the law of your country says otherwise.`,
+        `You can ask for a refund within ${f.refundDays} days of paying, as long as no scan has used the pass yet. Email ${f.contactEmail} with your payment reference. Once a scan has used the pass, or after ${f.refundDays} days, payments are not refundable, unless the law of your country says otherwise.${on("Lemon Squeezy") ? " Refunds and payment disputes are carried out through Lemon Squeezy, and its terms also apply to them." : ""}`,
       ],
     },
     {

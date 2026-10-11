@@ -7,6 +7,8 @@ import type { LegalFacts, Section } from "@/content/legal-types";
 export function privacySections(f: LegalFacts): Section[] {
   const active = f.processors.filter((p) => p.active);
   const ai = active.filter((p) => p.ai);
+  const on = (name: string) => active.some((p) => p.name === name);
+  const idp = on("Google") ? "GitHub or Google" : "GitHub";
   return [
     {
       id: "who",
@@ -24,10 +26,11 @@ export function privacySections(f: LegalFacts): Section[] {
           table: {
             head: ["Kind of data", "What it includes", "Where it comes from"],
             rows: [
-              ["Account", "Your email address, your name and the identifier of your GitHub or Google account. We only accept an email that GitHub or Google has verified.", "GitHub or Google, when you sign in"],
+              ["Account", `Your email address, your name and the identifier of your ${idp} account. We only accept an email that ${idp === "GitHub" ? "GitHub" : "GitHub or Google"} has verified.`, `${idp}, when you sign in`],
               ["Scan requests and results", "The repository you asked us to scan (owner, name, branch, commit) or the host name of the website you asked us to check (never the rest of the address), the legal regions you chose, the status, score and verdict, and the findings: rule, severity, file paths, line numbers and a short excerpt with secrets masked.", "You, and our analysis of the repository"],
               ["Orders and passes", "The repository, the currency and amount, a payment reference, the status and the dates.", "You, when you order a project pass"],
-              ["Technical data", "Our server logs record the method, address path, result code and duration of each request. Our hosting providers may also log your IP address and browser details.", "Your browser"],
+              ["Findings shown in full", "For each repository, which of its findings we showed you in full without a pass (a short identifier, never your code), so that the free allowance of two per repository is counted correctly.", "Our analysis, when you open a report"],
+              ["Technical data", "Our web server and our application keep logs that record your IP address, your browser's name and version (the user agent), the address you asked for, the result and the time. They are kept only in log files on our server that overwrite their oldest entries automatically. Our hosting provider may also log your IP address and browser details.", "Your browser"],
               ["Messages", "What you write to us by email, and your email address.", "You"],
             ],
           },
@@ -78,7 +81,10 @@ export function privacySections(f: LegalFacts): Section[] {
               },
             }
           : "We currently use no providers that need to be listed.",
-        "We also use providers that host our website and our servers. If you pay by bank transfer or QRIS, your bank handles the payment and we only see the details you send us.",
+        ...(on("Lemon Squeezy")
+          ? ["Payments: when you buy a project pass with a card or PayPal, Lemon Squeezy collects your payment and billing details itself, as the seller of record. We never see your card number. We receive the order reference, its status, the amount and the currency."]
+          : []),
+        "If you pay by bank transfer or QRIS, your bank handles the payment and we only see the details you send us.",
         ai.length > 0
           ? `Artificial intelligence: to write the plain-language explanation of each finding, we send ${ai.map((p) => p.name).join(" and ")} (processing in ${ai.map((p) => p.where).join(" and ")}) the finding's title, the names of the files and the line numbers it points to, and a short excerpt of the matching code. We automatically remove secrets, email addresses and phone numbers from the excerpt first, and we only send content from public repositories. We never send your name, your email address or your account details. Findings about privacy and legal risk are not sent. The provider's own privacy policy applies to what it does with that data. If the provider is unavailable, the report uses our built-in text instead.`
           : "Artificial intelligence: we do not currently send your code or your data to an AI model provider. Our reports are written from templates. If that changes, we will name the provider, say what is sent and where it is processed, and update this policy before we start.",
@@ -89,7 +95,7 @@ export function privacySections(f: LegalFacts): Section[] {
       id: "transfers",
       title: "Where your data is processed",
       blocks: [
-        "Our database is in Singapore. Our servers and providers may be in other countries, so your data may cross borders, including when you use Signoffly from outside the country where it is processed. Where the law requires safeguards for such transfers, we use them.",
+        "Our database is in Singapore and our servers are in Indonesia. Our providers may be in other countries, so your data may cross borders, including when you use Signoffly from outside the country where it is processed. Where the law requires safeguards for such transfers, we use them.",
       ],
     },
     {

@@ -49,7 +49,8 @@ describe("the privacy policy states what the product really does", () => {
   });
   it("describes the data that is stored, and the data that is not", () => {
     expect(all).toMatch(/email address/);
-    expect(all).toMatch(/GitHub or Google account/);
+    expect(all).toMatch(/identifier of your GitHub account/);
+    expect(all).not.toContain("Google"); // switched off until Google sign-in is configured
     expect(all).toMatch(/delete the copy when the scan ends/);
     expect(all).toMatch(/never run your code/);
     expect(all).toMatch(/mask anything that looks like a secret/);
@@ -72,9 +73,12 @@ describe("the privacy policy states what the product really does", () => {
   it("lists only providers that are really in use", () => {
     expect(all).toContain("GitHub");
     expect(all).toContain("Neon");
-    expect(all).not.toContain("Lemon Squeezy");
-    const withPayments = privacySections({ ...facts, processors: facts.processors.map((p) => ({ ...p, active: true })) });
-    expect(text(withPayments)).toContain("Lemon Squeezy");
+    expect(all).toContain("Biznet Gio");
+    expect(all).toContain("Lemon Squeezy"); // card payments are switched on
+    const noPayments = privacySections({ ...facts, processors: facts.processors.map((p) => (p.name === "Lemon Squeezy" ? { ...p, active: false } : p)) });
+    expect(text(noPayments)).not.toContain("Lemon Squeezy");
+    const withGoogle = privacySections({ ...facts, processors: facts.processors.map((p) => (p.name === "Google" ? { ...p, active: true } : p)) });
+    expect(text(withGoogle)).toMatch(/GitHub or Google account/);
   });
   it("matches the retention decision: kept until the account is deleted", () => {
     expect(all).toMatch(/until you delete your account/);

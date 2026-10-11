@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { isUuid, looksLikeRepoUrl, looksLikeScanTarget, looksLikeSite, newIdempotencyKey } from "@/lib/validation";
+import { isUuid, looksLikeRepoUrl, looksLikeScanTarget, looksLikeSite, newIdempotencyKey, linkForUrl } from "@/lib/validation";
 
 describe("looksLikeRepoUrl", () => {
   it.each(["github.com/a/b", "https://github.com/name/repo", "  github.com/name/repo  ", "http://www.github.com/n/r.git", "GITHUB.COM/A/B"])("accepts %s", (v) => {
@@ -39,5 +39,23 @@ describe("looksLikeSite and looksLikeScanTarget", () => {
     expect(looksLikeScanTarget("github.com/acme/shop")).toBe(true);
     expect(looksLikeScanTarget("not a link")).toBe(false);
     expect(looksLikeScanTarget("")).toBe(false);
+  });
+});
+describe("linkForUrl", () => {
+  it("drops the query, the fragment and any password from a pasted link", () => {
+    expect(linkForUrl("https://shop.example.com/page?token=abc123#top")).toBe("https://shop.example.com");
+    expect(linkForUrl("shop.example.com/reset/SECRETPATH?x=1")).toBe("shop.example.com");
+    expect(linkForUrl("https://user:pass@shop.example.com:8443/a")).toBe("https://shop.example.com:8443");
+    expect(linkForUrl("  https://shop.example.com  ")).toBe("https://shop.example.com");
+  });
+  it("keeps the path of a repository, without its query", () => {
+    expect(linkForUrl("github.com/acme/shop")).toBe("github.com/acme/shop");
+    expect(linkForUrl("https://github.com/acme/shop/tree/main?tab=readme#x")).toBe("https://github.com/acme/shop/tree/main");
+    expect(linkForUrl("https://tok:en@github.com/acme/shop")).toBe("https://github.com/acme/shop");
+  });
+  it("gives nothing for what is not a link", () => {
+    expect(linkForUrl("")).toBe("");
+    expect(linkForUrl("?token=abc")).toBe("");
+    expect(linkForUrl("#only")).toBe("");
   });
 });
